@@ -17,7 +17,7 @@ object Versions {
     const val viewBinding = "7.1.1"
 
     // Plugin
-    const val gradlePlugin = "7.0.4"
+    const val gradlePlugin = "7.1.2"
     const val kotlin = "1.6.20"
     const val hilt = "2.41"
     const val glide = "4.12.0"

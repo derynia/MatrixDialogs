@@ -1,27 +1,23 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
-    kotlin("android")
     kotlin("kapt")
 }
 
 android {
-    compileSdk = ConfigData.compileSdkVersion
-    buildToolsVersion = ConfigData.buildToolsVersion
+    compileSdk = 31
 
     defaultConfig {
-        applicationId = "com.matrixdialogs"
-        minSdk = ConfigData.minSdkVersion
-        targetSdk = ConfigData.targetSdkVersion
-        versionCode = ConfigData.versionCode
-        versionName = ConfigData.versionName
-
+        minSdk = 23
+        targetSdk = 31
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -29,20 +25,12 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
-
-    buildFeatures {
-        viewBinding = true
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -51,7 +39,7 @@ dependencies {
     implementation (Deps.coreKtx)
     implementation (Deps.appCompat)
     implementation (Deps.materialDesign)
-    implementation (Deps.constraintLayout)
+    implementation (Deps.viewBinding)
 
     // Hilt
     implementation(Deps.hilt)
@@ -61,7 +49,4 @@ dependencies {
     testImplementation (Deps.junit)
     androidTestImplementation (Deps.extJunit)
     androidTestImplementation (Deps.espresso)
-
-    // modules
-    implementation(project(":core"))
 }
