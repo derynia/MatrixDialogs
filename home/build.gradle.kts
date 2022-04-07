@@ -51,7 +51,7 @@ android {
 dependencies {
     // Modules
     implementation (project(":core"))
-    implementation (project(":home"))
+    implementation (project(":data"))
 
     // Core
     implementation (Deps.coreKtx)
