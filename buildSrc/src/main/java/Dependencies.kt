@@ -1,5 +1,6 @@
 object BuildPlugins {
     val firebase by lazy { "com.google.gms:google-services:${Versions.fireBaseVersion}" }
+    val crashLyticsPlugin by lazy { "com.google.firebase:firebase-crashlytics-gradle:${Versions.crashLyticsVersion}" }
     val android by lazy { "com.android.tools.build:gradle:${Versions.gradlePlugin}" }
     val kotlin by lazy { "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}" }
     val hilt by lazy {"com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"}
@@ -17,6 +18,7 @@ object Deps {
     // firebase
     val firebaseBom by lazy {"com.google.firebase:firebase-bom:${Versions.fireBaseBOMVersion}"}
     val analytics by lazy {"com.google.firebase:firebase-analytics-ktx"}
+    val crashLytics by lazy {"com.google.firebase:firebase-crashlytics-ktx"}
     val googleAuth by lazy { "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}" }
 
     // View
@@ -35,4 +37,9 @@ object Deps {
     // Hilt
     val hilt by lazy {"com.google.dagger:hilt-android:${Versions.hilt}"}
     val hiltCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
+
+    // Room
+    val roomCore by lazy { "androidx.room:room-ktx:${Versions.room}" }
+    val roomRuntime by lazy { "androidx.room:room-runtime:${Versions.room}" }
+    val roomCompiler by lazy { "androidx.room:room-compiler:${Versions.room}" }
 }

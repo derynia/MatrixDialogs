@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "10998101874",
+    "project_id": "matrix-dialogs",
+    "storage_bucket": "matrix-dialogs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10998101874:android:4f7a9592cc20870c4d0feb",
+        "android_client_info": {
+          "package_name": "com.matrixdialogs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10998101874-l2qg0lsd5b1rjactcs1lnskslnl9dt5g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.matrixdialogs",
+            "certificate_hash": "4b74765a62d5ab9728d4d2752cea25bfb45961c5"
+          }
+        },
+        {
+          "client_id": "10998101874-fu1rvam4bfk22vp5gbk8vtb5584vnrc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZqNx-BBUILR_4doLCUYJ1hu2xCjut1tM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10998101874-fu1rvam4bfk22vp5gbk8vtb5584vnrc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

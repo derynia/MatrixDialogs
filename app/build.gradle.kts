@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     kotlin("android")
     kotlin("kapt")
 }
@@ -47,11 +49,23 @@ android {
 }
 
 dependencies {
+    // Modules
+    implementation (project(":core"))
+
     // Core
     implementation (Deps.coreKtx)
     implementation (Deps.appCompat)
     implementation (Deps.materialDesign)
     implementation (Deps.constraintLayout)
+
+    // Firebase
+    implementation(platform(Deps.firebaseBom))
+    implementation(Deps.analytics)
+    implementation(Deps.crashLytics)
+
+    // Navigation
+    implementation (Deps.navigationFragmentKtx)
+    implementation (Deps.navigationUiKtx)
 
     // Hilt
     implementation(Deps.hilt)
