@@ -1,4 +1,4 @@
-package com.matrixdialogs.core.di
+package com.matrixdialogs.core
 
 import android.view.LayoutInflater
 import android.view.View

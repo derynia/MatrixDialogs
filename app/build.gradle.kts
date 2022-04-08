@@ -76,7 +76,4 @@ dependencies {
     testImplementation (Deps.junit)
     androidTestImplementation (Deps.extJunit)
     androidTestImplementation (Deps.espresso)
-
-    // modules
-    implementation(project(":core"))
 }

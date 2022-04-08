@@ -2,13 +2,18 @@ package com.matrixdialogs
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import java.lang.NullPointerException
-import java.lang.RuntimeException
+import androidx.appcompat.app.AppCompatDelegate
+import com.matrixdialogs.core.viewBinding
+import com.matrixdialogs.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private val binding by viewBinding(ActivityMainBinding::inflate)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        setContentView(binding.root)
     }
 }

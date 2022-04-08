@@ -1,29 +1,23 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("dagger.hilt.android.plugin")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
     kotlin("android")
     kotlin("kapt")
 }
 
 android {
-    compileSdk = ConfigData.compileSdkVersion
-    buildToolsVersion = ConfigData.buildToolsVersion
+    compileSdk = 31
 
     defaultConfig {
-        applicationId = "com.matrixdialogs"
-        minSdk = ConfigData.minSdkVersion
-        targetSdk = ConfigData.targetSdkVersion
-        versionCode = ConfigData.versionCode
-        versionName = ConfigData.versionName
-
+        minSdk = 23
+        targetSdk = 31
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -31,16 +25,12 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
     buildFeatures {
@@ -58,11 +48,9 @@ dependencies {
     implementation (Deps.appCompat)
     implementation (Deps.materialDesign)
     implementation (Deps.constraintLayout)
-
-    // Firebase
-    implementation(platform(Deps.firebaseBom))
-    implementation(Deps.analytics)
-    implementation(Deps.crashLytics)
+    implementation (Deps.viewBinding)
+    implementation (Deps.coroutines)
+    implementation (Deps.lifecycle)
 
     // Navigation
     implementation (Deps.navigationFragmentKtx)
@@ -76,7 +64,4 @@ dependencies {
     testImplementation (Deps.junit)
     androidTestImplementation (Deps.extJunit)
     androidTestImplementation (Deps.espresso)
-
-    // modules
-    implementation(project(":core"))
 }
