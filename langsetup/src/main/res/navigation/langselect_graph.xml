@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/langselect_graph"
+    app:startDestination="@id/langSelectFragment">
+
+    <fragment
+        android:id="@+id/langSelectFragment"
+        android:name="com.matrixdialogs.langsetup.fragment.LangSelectFragment"
+        android:label="fragment_lang_select"
+        tools:layout="@layout/fragment_lang_select" >
+        <action
+            android:id="@+id/action_langSelectFragment_to_addLangFragment"
+            app:destination="@id/addLangFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addLangFragment"
+        android:name="com.matrixdialogs.langsetup.fragment.AddLangFragment"
+        android:label="fragment_add_lang"
+        tools:layout="@layout/fragment_add_lang" />
+</navigation>

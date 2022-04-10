@@ -8,4 +8,8 @@ import androidx.room.PrimaryKey
 data class Language(
     @PrimaryKey val item_id: Int = 0,
     @ColumnInfo(name = "name") var name: String
-)
+) {
+    override fun toString(): String {
+        return this.name
+    }
+}

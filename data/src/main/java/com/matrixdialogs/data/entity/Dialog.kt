@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Dialog")
 data class Dialog(
-    @PrimaryKey val item_id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val item_id: Int = 0,
     @ColumnInfo(name = "name") var name: String,
     @ColumnInfo(name = "fileName") var fileName: String,
     @ColumnInfo(name = "languageFrom") var languageFrom: Int,

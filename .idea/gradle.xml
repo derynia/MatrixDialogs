@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/home" />
+            <option value="$PROJECT_DIR$/langsetup" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -10,6 +10,7 @@ buildscript {
         classpath(BuildPlugins.hilt)
         classpath(BuildPlugins.firebase)
         classpath(BuildPlugins.crashLyticsPlugin)
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20")
     }
 }
 

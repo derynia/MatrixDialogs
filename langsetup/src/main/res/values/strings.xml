@@ -1,0 +1,9 @@
+<resources>
+    <string name="language_selection">Language selection</string>
+    <string name="lang_select_help">Tap on language pair in list to select it. Tap button above to add new pair. Swipe right to remove pair.</string>
+    <string name="arrow">arrow</string>
+    <string name="add_language">Add language</string>
+    <string name="audio_language">Audio language</string>
+    <string name="translation_language">Translation language</string>
+    <string name="add_language_pair">Add new language pair</string>
+</resources>

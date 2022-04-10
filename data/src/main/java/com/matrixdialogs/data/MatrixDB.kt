@@ -6,15 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.matrixdialogs.data.dao.DialogDao
 import com.matrixdialogs.data.dao.LanguageDao
+import com.matrixdialogs.data.dao.LanguagePairsDao
 import com.matrixdialogs.data.entity.Dialog
 import com.matrixdialogs.data.entity.Language
+import com.matrixdialogs.data.entity.LanguagePairs
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Dialog::class, Language::class], version = 1)
+@Database(entities = [Dialog::class, Language::class, LanguagePairs::class], version = 2)
 abstract class MatrixDB : RoomDatabase() {
     internal abstract fun dialogDao(): DialogDao
     internal abstract fun languageDao(): LanguageDao
+    internal abstract fun languagePairsDao(): LanguagePairsDao
 
     fun populateLanguages(context: Context) {
         val lDao = languageDao()

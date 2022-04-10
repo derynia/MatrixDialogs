@@ -3,6 +3,8 @@ package com.matrixdialogs.data.di
 import android.content.Context
 import com.matrixdialogs.data.MatrixDB
 import com.matrixdialogs.data.repository.DialogRepository
+import com.matrixdialogs.data.repository.LanguageRepository
+import com.matrixdialogs.data.repository.LanguageSelectedRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,4 +24,12 @@ class DataModule {
     @Provides
     @Singleton
     fun provideDialogRepository(matrixDB: MatrixDB) =  DialogRepository(matrixDB)
+
+    @Provides
+    @Singleton
+    fun provideLanguageSelectedRepository(matrixDB: MatrixDB) =  LanguageSelectedRepository(matrixDB)
+
+    @Provides
+    @Singleton
+    fun provideLanguageRepository(matrixDB: MatrixDB) =  LanguageRepository(matrixDB)
 }
