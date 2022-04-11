@@ -16,7 +16,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:title="@string/matrix_dialogs" />
+        app:title="@string/matrix_dialogs">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAddMany"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/black"
+            app:icon="@drawable/add_many"
+            app:iconGravity="textEnd"
+            app:iconTint="@color/white"
+            android:layout_gravity="right"
+            app:layout_constraintTop_toTopOf="parent"
+            android:hint="@string/add_new_dialog"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.Core.Button.Outlined" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAddOne"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/black"
+            app:icon="@drawable/add_one"
+            app:iconGravity="textEnd"
+            app:iconTint="@color/white"
+            android:layout_gravity="right"
+            app:layout_constraintTop_toTopOf="parent"
+            android:hint="@string/add_new_dialog"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.Core.Button.Outlined" />
+        </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonLanguageSelect"

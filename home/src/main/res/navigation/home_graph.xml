@@ -9,5 +9,17 @@
         android:id="@+id/homeFragment"
         android:name="com.matrixdialogs.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_langselect_graph"
+            app:destination="@id/langselect_graph" />
+        <action
+            android:id="@+id/action_homeFragment_to_addEditDialogFragment"
+            app:destination="@id/addEditDialogFragment" />
+    </fragment>
+    <include app:graph="@navigation/langselect_graph" />
+    <fragment
+        android:id="@+id/addEditDialogFragment"
+        android:name="com.matrixdialogs.dialogs.AddEditDialogFragment"
+        android:label="AddEditDialogFragment" />
 </navigation>

@@ -1,10 +1,9 @@
-package com.matrixdialogs.home
+package com.matrixdialogs.dialogs
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.matrixdialogs.data.dataclass.LanguageSelected
-import com.matrixdialogs.data.entity.Dialog
-import com.matrixdialogs.data.repository.DialogRepository
+import com.matrixdialogs.data.repository.LanguageSelectedRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -13,15 +12,11 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val dialogRepository: DialogRepository
+class AddEditDialogViewModel @Inject constructor(
+    private val languageSelectedRepository: LanguageSelectedRepository
 ): ViewModel() {
-
-    fun getDialogs(languagesSelected: LanguageSelected) {
-    }
-
-    val dialogEvent : StateFlow<List<Dialog>>
-        get() = dialogRepository.getDialogs()
+    val languageSelectedEvent: StateFlow<List<LanguageSelected>>
+        get() = languageSelectedRepository.getLanguageSelectedList()
             .map { it }
             .stateIn(viewModelScope, SharingStarted.Lazily, mutableListOf())
 }

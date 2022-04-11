@@ -42,8 +42,6 @@ dependencies {
     // Modules
     implementation (project(":core"))
     implementation (project(":data"))
-    implementation (project(":langsetup"))
-    implementation (project(":dialogs"))
 
     // Core
     implementation (Deps.coreKtx)

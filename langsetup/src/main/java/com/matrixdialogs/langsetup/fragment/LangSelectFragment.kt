@@ -9,7 +9,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.matrixdialogs.core.viewBinding
+import com.matrixdialogs.data.dataclass.LanguageSelected
 import com.matrixdialogs.langsetup.R
 import com.matrixdialogs.langsetup.adapter.LangsAdapter
 import com.matrixdialogs.langsetup.databinding.FragmentLangSelectBinding
@@ -22,7 +24,14 @@ import kotlinx.coroutines.launch
 class LangSelectFragment : Fragment(R.layout.fragment_lang_select) {
     private val binding: FragmentLangSelectBinding by viewBinding(FragmentLangSelectBinding::bind)
     private val langSelectViewModel: LangSelectViewModel by viewModels()
-    private val adapter = LangsAdapter()
+    private val adapter = LangsAdapter(
+        { languageSelected -> selectItem(languageSelected) }
+    )
+
+    private fun selectItem(languageSelected: LanguageSelected) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set("lSelected", languageSelected)
+        activity?.onBackPressed()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

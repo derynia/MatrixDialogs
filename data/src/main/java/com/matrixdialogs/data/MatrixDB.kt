@@ -13,7 +13,7 @@ import com.matrixdialogs.data.entity.LanguagePairs
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Dialog::class, Language::class, LanguagePairs::class], version = 2)
+@Database(entities = [Dialog::class, Language::class, LanguagePairs::class], version = 3)
 abstract class MatrixDB : RoomDatabase() {
     internal abstract fun dialogDao(): DialogDao
     internal abstract fun languageDao(): LanguageDao

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.matrixdialogs.data.dataclass.LanguageSelected
 import com.matrixdialogs.langsetup.databinding.CardLanguageRecyclerItemBinding
 
-class LangsAdapter : ListAdapter<LanguageSelected, LangsViewHolder>(LangsComparator()) {
+class LangsAdapter(private val onItemClick: (LanguageSelected) -> Unit) : ListAdapter<LanguageSelected, LangsViewHolder>(LangsComparator()) {
     fun setList(langsSelected: List<LanguageSelected>?) {
         langsSelected?.let {
             submitList(langsSelected)
@@ -26,8 +26,9 @@ class LangsAdapter : ListAdapter<LanguageSelected, LangsViewHolder>(LangsCompara
     override fun onBindViewHolder(holder: LangsViewHolder, position: Int) {
         val langSelected = getItem(position)
         with (holder.binding) {
-            textSourceLanguage.text = langSelected.sourceLanguage.name
-            textDestLanguage.text = langSelected.destLanguage.name
+            textSourceLanguage.text = langSelected.sourceLanguage?.name
+            textDestLanguage.text = langSelected.destLanguage?.name
         }
+        holder.itemView.setOnClickListener { onItemClick(langSelected) }
     }
 }
