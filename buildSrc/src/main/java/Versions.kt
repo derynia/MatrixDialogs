@@ -17,6 +17,7 @@ object Versions {
     const val coroutines = "1.5.2"
     const val viewBinding = "7.1.1"
     const val lifecycleVersion = "2.4.1"
+    const val jsonVersion = "2.9.0"
 
     // Plugin
     const val gradlePlugin = "7.1.2"

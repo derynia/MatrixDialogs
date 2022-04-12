@@ -20,10 +20,10 @@ interface LanguagePairsDao {
     fun getLanguagePairsList() : Flow<List<LanguagePairs>>
 
     @Transaction
-    @Query("SELECT LanguagePairs.source_lang_id, LangSource.item_id AS item_id, LangSource.name AS name," +
-            " LanguagePairs.dest_lang_id, LangDest.item_id AS d_item_id, LangDest.name AS d_name" +
+    @Query("SELECT LanguagePairs.source_lang_code, LangSource.code AS code, LangSource.name AS name," +
+            " LanguagePairs.dest_lang_code, LangDest.code AS d_code, LangDest.name AS d_name" +
             " FROM LanguagePairs" +
-            " INNER JOIN Language AS LangSource ON LanguagePairs.source_lang_id = LangSource.item_id" +
-            " INNER JOIN Language AS LangDest ON LanguagePairs.dest_lang_id = LangDest.item_id")
+            " INNER JOIN Language AS LangSource ON LanguagePairs.source_lang_code = LangSource.code" +
+            " INNER JOIN Language AS LangDest ON LanguagePairs.dest_lang_code = LangDest.code")
     fun getPairsList() : Flow<List<LanguageSelected>>
 }

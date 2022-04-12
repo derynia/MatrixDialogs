@@ -1,9 +1,14 @@
 package com.matrixdialogs.data
 
 import android.content.Context
+import android.provider.SyncStateContract
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.matrixdialogs.core.LANGUAGE_JSON_READER_ERROR
 import com.matrixdialogs.data.dao.DialogDao
 import com.matrixdialogs.data.dao.LanguageDao
 import com.matrixdialogs.data.dao.LanguagePairsDao
@@ -12,8 +17,9 @@ import com.matrixdialogs.data.entity.Language
 import com.matrixdialogs.data.entity.LanguagePairs
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.IOException
 
-@Database(entities = [Dialog::class, Language::class, LanguagePairs::class], version = 3)
+@Database(entities = [Dialog::class, Language::class, LanguagePairs::class], version = 5)
 abstract class MatrixDB : RoomDatabase() {
     internal abstract fun dialogDao(): DialogDao
     internal abstract fun languageDao(): LanguageDao
@@ -24,11 +30,18 @@ abstract class MatrixDB : RoomDatabase() {
 
         GlobalScope.launch {
             if (lDao.languagesList().isEmpty()) {
-                val langList : ArrayList<Language> = ArrayList()
-                val sourceList = context.resources.getStringArray(R.array.lang_array)
-                for(i in sourceList.indices) {
-                    langList.add(Language(i, sourceList[i]))
+                lateinit var jsonString: String
+                try {
+                    jsonString = context.assets.open("languages.json")
+                        .bufferedReader()
+                        .use { it.readText() }
+                } catch (ioException: IOException) {
+                    Log.d(LANGUAGE_JSON_READER_ERROR, ioException.message.toString())
+                    return@launch
                 }
+
+                val listCountryType = object : TypeToken<List<Language>>() {}.type
+                val langList : ArrayList<Language> = Gson().fromJson(jsonString, listCountryType)
 
                 lDao.insertList(langList)
             }

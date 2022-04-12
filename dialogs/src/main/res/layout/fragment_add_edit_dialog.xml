@@ -32,14 +32,13 @@
 
     <Spinner
         android:id="@+id/spinnerLangPair"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toEndOf="@id/textLangPair"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textLangPair" />
+        app:layout_constraintTop_toTopOf="@id/textLangPair" />
 
     <TextView
         android:id="@+id/textFile"
@@ -47,10 +46,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
         android:textSize="16sp"
+        android:layout_marginTop="10dp"
         android:labelFor="@id/fieldFile"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fieldFile"
+        app:layout_constraintBottom_toBottomOf="@id/fieldFile"
         app:layout_constraintTop_toBottomOf="@id/spinnerLangPair" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -59,12 +60,11 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
         app:endIconMode="custom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textFile">
+        app:layout_constraintStart_toEndOf="@id/textFile"
+        app:layout_constraintTop_toBottomOf="@id/spinnerLangPair">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -72,6 +72,46 @@
             android:ellipsize="start"
             android:gravity="center_vertical|start"
             android:hint="@string/tap_to_select_file"
+            android:inputType="text"
+            android:paddingStart="5dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="0dp"
+            app:hintEnabled="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textName"
+        android:text="@string/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:labelFor="@id/fieldName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fieldName"
+        app:layout_constraintBottom_toBottomOf="@id/fieldName" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fieldName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:endIconMode="custom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textName"
+        app:layout_constraintTop_toBottomOf="@id/fieldFile">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="start"
+            android:gravity="center_vertical|start"
+            android:hint="@string/enter_name_of_the_dialog"
             android:inputType="text"
             android:paddingStart="5dp"
             android:paddingTop="0dp"
@@ -90,7 +130,7 @@
         android:textSize="16sp"
         android:labelFor="@id/fieldText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fieldFile" />
+        app:layout_constraintTop_toBottomOf="@id/fieldName" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/fieldText"
@@ -107,6 +147,7 @@
         app:layout_constraintBottom_toTopOf="@id/guidelineTexts">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editFieldText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textMultiLine"
@@ -127,33 +168,36 @@
 
     <TextView
         android:id="@+id/textTranslation"
-        android:text="@string/traslation"
+        android:text="@string/translation"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
         android:textSize="16sp"
-        android:labelFor="@id/fieldTraslation"
+        android:labelFor="@id/fieldTranslation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineTexts" />
+        app:layout_constraintTop_toTopOf="@id/buttonTranslation"
+        app:layout_constraintBottom_toBottomOf="@id/buttonTranslation"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonTranslation"
         style="@style/Widget.App.Button.OutlinedButton.IconOnly"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/black"
+        android:hint="@string/translate_text_via_google_translate"
         app:icon="@drawable/translation"
         app:iconGravity="textEnd"
         app:iconTint="@color/white"
         app:layout_constraintStart_toEndOf="@id/textTranslation"
-        app:layout_constraintTop_toTopOf="@id/textTranslation"
+        app:layout_constraintTop_toBottomOf="@id/guidelineTexts"
         app:shapeAppearance="@style/ShapeAppearanceOverlay.Core.Button.Outlined" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/fieldTraslation"
+        android:id="@+id/fieldTranslation"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="0dp"

@@ -15,8 +15,8 @@ interface DialogDao {
     @Query("SELECT * FROM Dialog")
     fun getDialogs() : Flow<List<Dialog>>
 
-    @Query("SELECT * FROM Dialog WHERE languageFrom = :languageFrom AND languageTo = :languageTo")
-    fun getDialogsByLanguagePair(languageFrom: Int, languageTo: Int) : Flow<List<Dialog>>
+    @Query("SELECT * FROM Dialog WHERE language_from_code = :languageFromCode AND language_to_code = :languageToCode")
+    fun getDialogsByLanguagePair(languageFromCode: String, languageToCode: String) : Flow<List<Dialog>>
 
     @Query("DELETE FROM Dialog WHERE item_id = :id")
     fun deleteDialog(id: Int)

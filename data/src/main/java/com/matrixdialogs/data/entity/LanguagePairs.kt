@@ -3,8 +3,8 @@ package com.matrixdialogs.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["source_lang_id", "dest_lang_id"])
+@Entity(primaryKeys = ["source_lang_code", "dest_lang_code"])
 data class LanguagePairs(
-    @ColumnInfo val source_lang_id: Int = 0,
-    @ColumnInfo val dest_lang_id: Int = 0
+    @ColumnInfo val source_lang_code: String,
+    @ColumnInfo val dest_lang_code: String
 )

@@ -1,14 +1,18 @@
 package com.matrixdialogs.core.di
 
+import android.content.Context
+import androidx.annotation.StringRes
 import com.matrixdialogs.core.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import javax.inject.Inject
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -44,6 +48,15 @@ class ApplicationModule {
     fun provideCoroutineScope(): CoroutineScope {
         val dispatcherProvider : DispatcherProvider = provideDispatchers()
         return CoroutineScope(SupervisorJob() + dispatcherProvider.io)
+    }
+
+    @Singleton
+    class ResourcesProvider @Inject constructor(
+        @ApplicationContext private val context: Context
+    ) {
+        fun getString(@StringRes stringResId: Int): String {
+            return context.getString(stringResId)
+        }
     }
 }
 

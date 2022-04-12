@@ -2,10 +2,12 @@ package com.matrixdialogs.langsetup.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.matrixdialogs.core.di.ApplicationModule
 import com.matrixdialogs.data.entity.Language
 import com.matrixdialogs.data.entity.LanguagePairs
 import com.matrixdialogs.data.repository.LanguageRepository
 import com.matrixdialogs.data.repository.LanguageSelectedRepository
+import com.matrixdialogs.langsetup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +20,8 @@ import javax.inject.Inject
 class LangAddViewModel @Inject constructor(
     private val languageRepository: LanguageRepository,
     private val languageSelectedRepository: LanguageSelectedRepository,
-    private val externalScope: CoroutineScope = GlobalScope
+    private val externalScope: CoroutineScope = GlobalScope,
+    private val resourcesProvider: ApplicationModule.ResourcesProvider
 ): ViewModel() {
     val languageEvent : StateFlow<List<Language>>
         get() = languageRepository.getDialogs()
@@ -27,15 +30,15 @@ class LangAddViewModel @Inject constructor(
 
     fun validateAndAddPair(sourceLang: Language?, destLang : Language?): String =
         when {
-            sourceLang == destLang -> "Audio language must not be equal to translation language"
-            sourceLang == null -> "Select Audio language"
-            destLang == null -> "Select Translation language"
+            sourceLang == destLang -> resourcesProvider.getString(R.string.err_lang_must_not_equal)
+            sourceLang == null -> resourcesProvider.getString(R.string.err_select_source_lang)
+            destLang == null -> resourcesProvider.getString(R.string.err_select_dest_lang)
             else -> {
                 externalScope.launch {
                     languageSelectedRepository.insert(
                         LanguagePairs(
-                            sourceLang.item_id,
-                            destLang.item_id
+                            sourceLang.code,
+                            destLang.code
                         )
                     )
                 }

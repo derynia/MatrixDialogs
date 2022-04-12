@@ -184,4 +184,5 @@
         <item>Yoruba</item>
         <item>Zhuang, Chuang</item>
     </string-array>
+    <string name="json_read_error">Error reading JSON from asset</string>
 </resources>

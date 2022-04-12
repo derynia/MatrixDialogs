@@ -48,6 +48,7 @@ dependencies {
     implementation (Deps.appCompat)
     implementation (Deps.materialDesign)
     implementation (Deps.viewBinding)
+    implementation (Deps.json)
 
     // Hilt
     implementation(Deps.hilt)

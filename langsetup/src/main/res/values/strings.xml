@@ -6,4 +6,7 @@
     <string name="audio_language">Audio language</string>
     <string name="translation_language">Translation language</string>
     <string name="add_language_pair">Add new language pair</string>
+    <string name="err_lang_must_not_equal">Audio language must not be equal to translation language</string>
+    <string name="err_select_source_lang">Select Audio language</string>
+    <string name="err_select_dest_lang">Select Translation language</string>
 </resources>

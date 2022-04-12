@@ -19,9 +19,9 @@ class DialogRepository @Inject constructor(
     fun getDialogs() : Flow<List<Dialog>> {
         val list = mutableListOf<Dialog>()
 
-        list.add(Dialog(0, "First dialog", "file1.mp3", 0, 1, "", "", 10))
-        list.add(Dialog(0, "Second dialog", "file2.mp3", 0, 1, "", "", 10))
-        list.add(Dialog(0, "Third dialog", "file3.mp3", 0, 1, "", "", 10))
+//        list.add(Dialog(0, "First dialog", "file1.mp3", 0, 1, "", "", 10))
+//        list.add(Dialog(0, "Second dialog", "file2.mp3", 0, 1, "", "", 10))
+//        list.add(Dialog(0, "Third dialog", "file3.mp3", 0, 1, "", "", 10))
 
         return flowOf(list)
     }

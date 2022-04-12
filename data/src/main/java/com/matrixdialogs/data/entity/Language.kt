@@ -2,26 +2,30 @@ package com.matrixdialogs.data.entity
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
 data class Language(
-    @PrimaryKey val item_id: Int = 0,
-    @ColumnInfo(name = "name") var name: String?
+    @PrimaryKey @NonNull @ColumnInfo(name = "code") val code: String,
+    @ColumnInfo(name = "name") var name: String?,
+    @ColumnInfo(name = "nativeName") val nativeName: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
+        parcel.readString() ?: "",
+        parcel.readString(),
         parcel.readString()
     ) {
     }
 
-    override fun toString() = this.name ?: ""
+    override fun toString() = "${this.name} (${this.nativeName})"
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(item_id)
+        parcel.writeString(code)
         parcel.writeString(name)
+        parcel.writeString(nativeName)
     }
 
     override fun describeContents(): Int {
