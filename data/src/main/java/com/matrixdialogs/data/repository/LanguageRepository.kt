@@ -14,5 +14,7 @@ class LanguageRepository @Inject constructor(
         languageDao.insert(language)
     }
 
-    fun getDialogs() : Flow<List<Language>> = languageDao.getLanguages()
+    fun getLanguages() : Flow<List<Language>> = languageDao.getLanguages()
+
+    fun getEmptyLanguage() : Language = Language("", "", "")
 }

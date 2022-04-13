@@ -1,7 +1,7 @@
 package com.matrixdialogs.data
 
 import android.content.Context
-import android.provider.SyncStateContract
+import android.provider.Settings
 import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
@@ -15,8 +15,7 @@ import com.matrixdialogs.data.dao.LanguagePairsDao
 import com.matrixdialogs.data.entity.Dialog
 import com.matrixdialogs.data.entity.Language
 import com.matrixdialogs.data.entity.LanguagePairs
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.IOException
 
 @Database(entities = [Dialog::class, Language::class, LanguagePairs::class], version = 5)
@@ -25,27 +24,27 @@ abstract class MatrixDB : RoomDatabase() {
     internal abstract fun languageDao(): LanguageDao
     internal abstract fun languagePairsDao(): LanguagePairsDao
 
-    fun populateLanguages(context: Context) {
+    suspend fun populateLanguages(context: Context) = withContext(Dispatchers.IO) {
         val lDao = languageDao()
 
-        GlobalScope.launch {
-            if (lDao.languagesList().isEmpty()) {
-                lateinit var jsonString: String
-                try {
-                    jsonString = context.assets.open("languages.json")
-                        .bufferedReader()
-                        .use { it.readText() }
-                } catch (ioException: IOException) {
-                    Log.d(LANGUAGE_JSON_READER_ERROR, ioException.message.toString())
-                    return@launch
-                }
-
-                val listCountryType = object : TypeToken<List<Language>>() {}.type
-                val langList : ArrayList<Language> = Gson().fromJson(jsonString, listCountryType)
-
-                lDao.insertList(langList)
-            }
+        if (lDao.languagesList().isNotEmpty()) {
+            return@withContext
         }
+
+        lateinit var jsonString: String
+        try {
+            jsonString = context.assets.open("languages.json")
+                .bufferedReader()
+                .use { it.readText() }
+        } catch (ioException: IOException) {
+            Log.d(LANGUAGE_JSON_READER_ERROR, ioException.message.toString())
+            return@withContext
+        }
+
+        val listCountryType = object : TypeToken<List<Language>>() {}.type
+        val langList : ArrayList<Language> = Gson().fromJson(jsonString, listCountryType)
+
+        lDao.insertList(langList)
     }
 
     companion object {
@@ -54,7 +53,10 @@ abstract class MatrixDB : RoomDatabase() {
                 .fallbackToDestructiveMigration()
                 .build()
 
-            instance.populateLanguages(context)
+            runBlocking {
+                instance.populateLanguages(context)
+            }
+
             return instance
         }
     }

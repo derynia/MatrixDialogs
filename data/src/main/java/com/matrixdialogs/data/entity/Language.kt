@@ -41,4 +41,12 @@ data class Language(
             return arrayOfNulls(size)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        return other is Language && other.code == this.code
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 }

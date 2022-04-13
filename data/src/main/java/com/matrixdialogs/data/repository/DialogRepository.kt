@@ -1,6 +1,7 @@
 package com.matrixdialogs.data.repository
 
 import com.matrixdialogs.data.MatrixDB
+import com.matrixdialogs.data.dataclass.LanguageSelected
 import com.matrixdialogs.data.entity.Dialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -15,14 +16,18 @@ class DialogRepository @Inject constructor(
         dialogDao.insert(dialog)
     }
 
-    //fun getDialogs() : Flow<List<Dialog>> = dialogDao.getDialogs()
-    fun getDialogs() : Flow<List<Dialog>> {
-        val list = mutableListOf<Dialog>()
+    fun getDialogsByPair(languageSelected: LanguageSelected) : Flow<List<Dialog>>
+        = dialogDao.getDialogsByLanguagePair(languageSelected.sourceLanguage?.code ?: "",
+            languageSelected.destLanguage?.code ?: "")
 
-//        list.add(Dialog(0, "First dialog", "file1.mp3", 0, 1, "", "", 10))
-//        list.add(Dialog(0, "Second dialog", "file2.mp3", 0, 1, "", "", 10))
-//        list.add(Dialog(0, "Third dialog", "file3.mp3", 0, 1, "", "", 10))
-
-        return flowOf(list)
-    }
+    fun getDialogs() : Flow<List<Dialog>> = dialogDao.getDialogs()
+//    fun getDialogs() : Flow<List<Dialog>> {
+//        val list = mutableListOf<Dialog>()
+//
+////        list.add(Dialog(0, "First dialog", "file1.mp3", 0, 1, "", "", 10))
+////        list.add(Dialog(0, "Second dialog", "file2.mp3", 0, 1, "", "", 10))
+////        list.add(Dialog(0, "Third dialog", "file3.mp3", 0, 1, "", "", 10))
+//
+//        return flowOf(list)
+//    }
 }

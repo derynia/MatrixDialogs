@@ -2,6 +2,7 @@ package com.matrixdialogs.data.di
 
 import android.content.Context
 import com.matrixdialogs.data.MatrixDB
+import com.matrixdialogs.data.SharedPrefsRepository
 import com.matrixdialogs.data.repository.DialogRepository
 import com.matrixdialogs.data.repository.LanguageRepository
 import com.matrixdialogs.data.repository.LanguageSelectedRepository
@@ -32,4 +33,8 @@ class DataModule {
     @Provides
     @Singleton
     fun provideLanguageRepository(matrixDB: MatrixDB) =  LanguageRepository(matrixDB)
+
+    @Provides
+    @Singleton
+    fun provideSharedPrefs(@ApplicationContext context: Context) =  SharedPrefsRepository(context)
 }

@@ -44,7 +44,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .currentBackStackEntry?.savedStateHandle?.getLiveData<LanguageSelected>("lSelected")?.observe(viewLifecycleOwner)
             {result ->
                 Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show()
-                homeViewModel.getDialogs(result)
+                homeViewModel.currentLanguageSelected = result
+                homeViewModel.refreshDialogs()
             }
 
         binding.buttonLanguageSelect.setOnClickListener {

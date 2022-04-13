@@ -24,7 +24,7 @@ class LangAddViewModel @Inject constructor(
     private val resourcesProvider: ApplicationModule.ResourcesProvider
 ): ViewModel() {
     val languageEvent : StateFlow<List<Language>>
-        get() = languageRepository.getDialogs()
+        get() = languageRepository.getLanguages()
             .map { it }
             .stateIn(viewModelScope, SharingStarted.Lazily, mutableListOf())
 
