@@ -20,15 +20,9 @@ class HomeViewModel @Inject constructor(
 ): ViewModel() {
     private val emptyLanguage = languageRepository.getEmptyLanguage()
     var currentLanguageSelected = LanguageSelected(emptyLanguage, emptyLanguage)
-//    private val languageSelectedEvent = MutableStateFlow<LanguageSelected>(LanguageSelected(emptyLanguage, emptyLanguage))
-//    private val languageSelectedStateEvent : StateFlow<LanguageSelected> = languageSelectedEvent
 
     private val mutableDialogEvent = MutableStateFlow<List<Dialog>>(mutableListOf())
     val dialogEvent : StateFlow<List<Dialog>> = mutableDialogEvent
-//    val dialogEvent : StateFlow<List<Dialog>>
-//        get() = dialogRepository.getDialogsByPair(currentLanguageSelected)
-//            .map { it }
-//            .stateIn(viewModelScope, SharingStarted.Lazily, mutableListOf())
 
     init {
         val cLanguage = sharedPrefsRepository.getCurrentSelected()

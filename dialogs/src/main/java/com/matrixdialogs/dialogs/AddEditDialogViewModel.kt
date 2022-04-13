@@ -1,8 +1,8 @@
 package com.matrixdialogs.dialogs
 
-import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.matrixdialogs.data.dataclass.LanguageSelected
@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-
 @HiltViewModel
 class AddEditDialogViewModel @Inject constructor(
     private val languageSelectedRepository: LanguageSelectedRepository
@@ -24,16 +23,23 @@ class AddEditDialogViewModel @Inject constructor(
             .map { it }
             .stateIn(viewModelScope, SharingStarted.Lazily, mutableListOf())
 
-    fun getTranslateIntent(text: CharSequence, langSelected: LanguageSelected) : Intent? {
+    fun getTranslateIntent(text: CharSequence, langSelected: LanguageSelected) : Intent {
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
-        intent.putExtra(Intent.EXTRA_TEXT, text.toString())
-        intent.putExtra("key_text_input", text.toString())
-        intent.putExtra("key_text_output", "")
-        intent.putExtra("key_language_from", langSelected.sourceLanguage?.code)
-        intent.putExtra("key_language_to", langSelected.destLanguage?.code)
-        intent.putExtra("key_suggest_translation", "")
-        intent.putExtra("key_from_floating_window", false)
+        //intent.`package` = "com.google.android.apps.translate"
+
+        val uri: Uri = Uri.Builder()
+            .scheme("http")
+            .authority("translate.google.com")
+            .path("/m/translate")
+            .appendQueryParameter(
+                "q",
+                text.toString()
+            )
+            .appendQueryParameter("tl", langSelected.destLanguage?.code) // target language
+            .appendQueryParameter("sl", langSelected.sourceLanguage?.code) // source language
+            .build()
+        intent.data = uri
         intent.component = ComponentName(
             "com.google.android.apps.translate",
             "com.google.android.apps.translate.TranslateActivity"

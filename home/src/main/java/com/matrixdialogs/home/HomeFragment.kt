@@ -3,6 +3,7 @@ package com.matrixdialogs.home
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,6 +18,7 @@ import com.matrixdialogs.home.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+typealias coreString = com.matrixdialogs.core.R.string
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -41,7 +43,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         findNavController()
-            .currentBackStackEntry?.savedStateHandle?.getLiveData<LanguageSelected>("lSelected")?.observe(viewLifecycleOwner)
+            .currentBackStackEntry?.savedStateHandle?.getLiveData<LanguageSelected>(getString(coreString.lang_selected_key))?.observe(viewLifecycleOwner)
             {result ->
                 Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show()
                 homeViewModel.currentLanguageSelected = result
@@ -55,7 +57,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.buttonAddOne.setOnClickListener {
             Navigation.findNavController(this.requireView())
-                .navigate(R.id.action_homeFragment_to_addEditDialogFragment)
+                .navigate(
+                    R.id.action_homeFragment_to_addEditDialogFragment,
+                    bundleOf(getString(coreString.lang_selected_key) to homeViewModel.currentLanguageSelected)
+                )
         }
 
         binding.buttonAddMany.setOnClickListener {
