@@ -7,4 +7,5 @@
     <string name="sign_minus">-</string>
     <string name="sign_plus">+</string>
     <string name="add_new_dialog">Add new dialog</string>
+    <string name="no_pair_selected">no language pair selected</string>
 </resources>

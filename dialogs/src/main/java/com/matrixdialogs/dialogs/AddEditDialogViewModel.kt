@@ -5,18 +5,29 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.matrixdialogs.core.di.ApplicationModule
 import com.matrixdialogs.data.dataclass.LanguageSelected
+import com.matrixdialogs.data.entity.Dialog
+import com.matrixdialogs.data.entity.Language
+import com.matrixdialogs.data.entity.LanguagePairs
+import com.matrixdialogs.data.repository.DialogRepository
 import com.matrixdialogs.data.repository.LanguageSelectedRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddEditDialogViewModel @Inject constructor(
-    private val languageSelectedRepository: LanguageSelectedRepository
+    private val languageSelectedRepository: LanguageSelectedRepository,
+    private val dialogRepository: DialogRepository,
+    private val externalScope: CoroutineScope = GlobalScope,
+    private val resourcesProvider: ApplicationModule.ResourcesProvider
 ): ViewModel() {
     val languageSelectedEvent: StateFlow<List<LanguageSelected>>
         get() = languageSelectedRepository.getLanguageSelectedList()
@@ -26,7 +37,6 @@ class AddEditDialogViewModel @Inject constructor(
     fun getTranslateIntent(text: CharSequence, langSelected: LanguageSelected) : Intent {
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
-        //intent.`package` = "com.google.android.apps.translate"
 
         val uri: Uri = Uri.Builder()
             .scheme("http")
@@ -47,4 +57,19 @@ class AddEditDialogViewModel @Inject constructor(
 
         return intent
     }
+
+    fun validateAndAddDialog(dialog: Dialog): String =
+        when {
+            dialog.fileName.isBlank() -> resourcesProvider.getString(R.string.filename_required)
+            dialog.name.isBlank() -> resourcesProvider.getString(R.string.name_required)
+            dialog.languageFrom == null -> resourcesProvider.getString(R.string.source_language_required)
+            dialog.languageTo == null -> resourcesProvider.getString(R.string.dest_language_required)
+            else -> {
+                externalScope.launch {
+                    dialogRepository.insert(dialog)
+                }
+
+                ""
+            }
+        }
 }

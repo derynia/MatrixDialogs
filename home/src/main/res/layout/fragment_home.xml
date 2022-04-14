@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:subtitle="@string/no_pair_selected"
         app:title="@string/matrix_dialogs">
 
         <com.google.android.material.button.MaterialButton

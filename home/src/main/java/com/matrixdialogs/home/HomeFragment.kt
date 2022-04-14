@@ -2,7 +2,6 @@ package com.matrixdialogs.home
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,8 +30,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setUpViews()
     }
 
+    private fun setCurrentLanguage(result: LanguageSelected) {
+        homeViewModel.currentLanguageSelected = result
+        homeViewModel.refreshDialogs()
+        binding.toolbar.subtitle = homeViewModel.currentLanguageSelected.toString()
+    }
+
     private fun setUpViews() {
         binding.recyclerDialogs.adapter = adapter
+        binding.toolbar.subtitle = homeViewModel.currentLanguageSelected.toString()
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -45,9 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         findNavController()
             .currentBackStackEntry?.savedStateHandle?.getLiveData<LanguageSelected>(getString(coreString.lang_selected_key))?.observe(viewLifecycleOwner)
             {result ->
-                Toast.makeText(context, result.toString(), Toast.LENGTH_LONG).show()
-                homeViewModel.currentLanguageSelected = result
-                homeViewModel.refreshDialogs()
+                setCurrentLanguage(result)
             }
 
         binding.buttonLanguageSelect.setOnClickListener {
