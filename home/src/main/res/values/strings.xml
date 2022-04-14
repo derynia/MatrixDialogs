@@ -8,4 +8,22 @@
     <string name="sign_plus">+</string>
     <string name="add_new_dialog">Add new dialog</string>
     <string name="no_pair_selected">no language pair selected</string>
+    <string name="about">About this App</string>
+    <string name="what_is_it_for">What is it for?</string>
+    <string name="this_app_is">"This app is intended to help in language learning.
+There is a method of learning languages which is listening to audio dialogues of length of about 1 minute.
+Such a dialog must be listened in cycle for about 20 minutes.
+It's preferable that the dialog doesn't contain any ambient sounds."
+    </string>
+    <string name="how_to_use_desc">"First create a pair of languages.
+A pair consists of two languages - audio language and translation language.
+You may create any quantity of pairs. For adding and selecting pairs tap Select language pair.
+For a selected pair you can create dialogs. There's two buttons for adding one dialog and adding a directory.
+A dialog consists of a ling to audio file which must be placed on your phone. An original text, which you can read and a translation for this text (all optional).
+You must also provide a name for a dialog (any name).
+After that you can listen to dialog using play/pause button. Additions buttons let you see original text"
+    </string>
+    <string name="help">Help</string>
+    <string name="how_to_use_it">How to use it</string>
+    <string name="dialog">Dialog</string>
 </resources>

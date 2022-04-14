@@ -43,7 +43,6 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         currentLanguageSelected = arguments?.getParcelable(getString(coreString.lang_selected_key))
-        Toast.makeText(context, currentLanguageSelected.toString(), Toast.LENGTH_LONG).show()
         setUpViews()
     }
 

@@ -16,18 +16,9 @@ class DialogRepository @Inject constructor(
         dialogDao.insert(dialog)
     }
 
-    fun getDialogsByPair(languageSelected: LanguageSelected) : Flow<List<Dialog>>
+    fun getDialogsByPair(languageSelected: LanguageSelected, repeats: Int) : Flow<List<Dialog>>
         = dialogDao.getDialogsByLanguagePair(languageSelected.sourceLanguage?.code ?: "",
-            languageSelected.destLanguage?.code ?: "")
+            languageSelected.destLanguage?.code ?: "", repeats)
 
     fun getDialogs() : Flow<List<Dialog>> = dialogDao.getDialogs()
-//    fun getDialogs() : Flow<List<Dialog>> {
-//        val list = mutableListOf<Dialog>()
-//
-////        list.add(Dialog(0, "First dialog", "file1.mp3", 0, 1, "", "", 10))
-////        list.add(Dialog(0, "Second dialog", "file2.mp3", 0, 1, "", "", 10))
-////        list.add(Dialog(0, "Third dialog", "file3.mp3", 0, 1, "", "", 10))
-//
-//        return flowOf(list)
-//    }
 }

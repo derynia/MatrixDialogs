@@ -2,4 +2,8 @@
 <resources>
     <string name="submit">Submit</string>
     <string name="lang_selected_key">lSelected</string>
+    <string name="text_key">text</string>
+    <string name="header_key">header</string>
+    <string name="dialog_text_name">Text</string>
+    <string name="dialog_translation_name">Translation</string>
 </resources>

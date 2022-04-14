@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            mutableDialogEvent.emitAll(dialogRepository.getDialogsByPair(currentLanguageSelected))
+            mutableDialogEvent.emitAll(dialogRepository.getDialogsByPair(currentLanguageSelected, 20))
         }
     }
 }

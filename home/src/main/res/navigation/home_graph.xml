@@ -16,10 +16,25 @@
         <action
             android:id="@+id/action_homeFragment_to_addEditDialogFragment"
             app:destination="@id/addEditDialogFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_showTextFragment"
+            app:destination="@id/showTextFragment" />
     </fragment>
     <include app:graph="@navigation/langselect_graph" />
     <fragment
         android:id="@+id/addEditDialogFragment"
         android:name="com.matrixdialogs.dialogs.AddEditDialogFragment"
         android:label="AddEditDialogFragment" />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.matrixdialogs.home.HelpFragment"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/showTextFragment"
+        android:name="com.matrixdialogs.home.ShowTextFragment"
+        android:label="ShowTextFragment" />
 </navigation>

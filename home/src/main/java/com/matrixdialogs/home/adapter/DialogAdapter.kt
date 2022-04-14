@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.ListAdapter
 import com.matrixdialogs.data.entity.Dialog
 import com.matrixdialogs.home.databinding.CardDialogRecyclerItemBinding
 
-class DialogAdapter : ListAdapter<Dialog, DialogViewHolder>(DialogComparator()) {
+class DialogAdapter(
+    private val onButtonTextClick : (Dialog) -> Unit,
+    private val onButtonTranslationClick : (Dialog) -> Unit
+) : ListAdapter<Dialog, DialogViewHolder>(DialogComparator()) {
+
     fun setList(dialogs: List<Dialog>?) {
         dialogs?.let {
             submitList(dialogs)
@@ -25,10 +29,6 @@ class DialogAdapter : ListAdapter<Dialog, DialogViewHolder>(DialogComparator()) 
 
     override fun onBindViewHolder(holder: DialogViewHolder, position: Int) {
         val dialog = getItem(position)
-        with (holder.binding) {
-            textDialogName.text = dialog.name
-            textCount.text = ""
-            textRepeats.text = dialog.repeats.toString()
-        }
+        holder.bind(dialog, onButtonTextClick, onButtonTranslationClick)
     }
 }

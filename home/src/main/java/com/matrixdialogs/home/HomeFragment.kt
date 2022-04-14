@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.matrixdialogs.core.viewBinding
 import com.matrixdialogs.data.dataclass.LanguageSelected
+import com.matrixdialogs.data.entity.Dialog
 import com.matrixdialogs.home.adapter.DialogAdapter
 import com.matrixdialogs.home.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,29 @@ typealias coreString = com.matrixdialogs.core.R.string
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding: FragmentHomeBinding by viewBinding(FragmentHomeBinding::bind)
     private val homeViewModel: HomeViewModel by viewModels()
-    private val adapter = DialogAdapter()
+    private val adapter = DialogAdapter(
+        { dialog -> openText(dialog) },
+        { dialog -> openTranslation(dialog) }
+    )
+
+    private fun navigateToTextFragment(text: String, header: String) {
+        Navigation.findNavController(this.requireView())
+            .navigate(
+                R.id.action_homeFragment_to_showTextFragment,
+                bundleOf(
+                    getString(coreString.text_key) to text,
+                    getString(coreString.header_key) to header
+                )
+            )
+    }
+
+    private fun openText(dialog: Dialog) {
+        navigateToTextFragment(dialog.text, getString(coreString.dialog_text_name))
+    }
+
+    private fun openTranslation(dialog: Dialog) {
+        navigateToTextFragment(dialog.text, getString(coreString.dialog_translation_name))
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,6 +80,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.buttonLanguageSelect.setOnClickListener {
             Navigation.findNavController(this.requireView())
                 .navigate(R.id.action_homeFragment_to_langselect_graph)
+        }
+
+        binding.buttonHelp.setOnClickListener {
+            Navigation.findNavController(this.requireView())
+                .navigate(
+                    R.id.action_homeFragment_to_helpFragment
+                )
         }
 
         binding.buttonAddOne.setOnClickListener {
