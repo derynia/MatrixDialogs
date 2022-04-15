@@ -20,4 +20,7 @@ interface DialogDao {
 
     @Query("DELETE FROM Dialog WHERE item_id = :id")
     fun deleteDialog(id: Int)
+
+    @Query("SELECT * FROM Dialog WHERE item_id = :id")
+    fun getById(id: Int) : Dialog
 }

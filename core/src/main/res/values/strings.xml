@@ -6,4 +6,5 @@
     <string name="header_key">header</string>
     <string name="dialog_text_name">Text</string>
     <string name="dialog_translation_name">Translation</string>
+    <string name="dialog_id_key">dialog_id</string>
 </resources>

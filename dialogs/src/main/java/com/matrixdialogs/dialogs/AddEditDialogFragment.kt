@@ -4,11 +4,10 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,7 +19,6 @@ import com.matrixdialogs.core.LANG_PAIR_SAVE_ERROR
 import com.matrixdialogs.core.showError
 import com.matrixdialogs.core.viewBinding
 import com.matrixdialogs.data.dataclass.LanguageSelected
-import com.matrixdialogs.data.entity.Dialog
 import com.matrixdialogs.dialogs.databinding.FragmentAddEditDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -30,9 +28,9 @@ typealias coreString = com.matrixdialogs.core.R.string
 
 @AndroidEntryPoint
 class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
+    private var isBind = false
     private val binding: FragmentAddEditDialogBinding by viewBinding(FragmentAddEditDialogBinding::bind)
     private val addEditViewModel: AddEditDialogViewModel by viewModels()
-    private var currentLanguageSelected: LanguageSelected? = null
     private lateinit var languageSelectedAdapter : ArrayAdapter<LanguageSelected>
     private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -42,7 +40,8 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        currentLanguageSelected = arguments?.getParcelable(getString(coreString.lang_selected_key))
+
+        addEditViewModel.currentLanguageSelected = arguments?.getParcelable(getString(coreString.lang_selected_key))
         setUpViews()
     }
 
@@ -56,6 +55,31 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
         }
     }
 
+    private fun bindFields() {
+        with(addEditViewModel.dialog) {
+            fileName = binding.editFieldFileName.text.toString()
+            name = binding.editFieldName.text.toString()
+            languageFromCode = addEditViewModel.currentLanguageSelected?.sourceLanguage?.code ?: ""
+            languageToCode = addEditViewModel.currentLanguageSelected?.destLanguage?.code ?: ""
+            languageFrom = addEditViewModel.currentLanguageSelected?.sourceLanguage
+            languageTo = addEditViewModel.currentLanguageSelected?.sourceLanguage
+            text = binding.editFieldText.text.toString()
+            translation = binding.editFieldTrans.text.toString()
+        }
+    }
+
+    private fun bindDataFromDialogObject() {
+        if (addEditViewModel.isEdit() && !isBind) {
+            with(binding) {
+                editFieldName.setText(addEditViewModel.dialog.name)
+                editFieldFileName.setText(addEditViewModel.dialog.fileName)
+                editFieldText.setText(addEditViewModel.dialog.text)
+                editFieldTrans.setText(addEditViewModel.dialog.translation)
+            }
+            isBind = true
+        }
+    }
+
     private fun setUpViews() {
         languageSelectedAdapter = ArrayAdapter<LanguageSelected>(requireContext(), android.R.layout.simple_spinner_item, mutableListOf())
 
@@ -63,25 +87,24 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
             activity?.onBackPressed()
         }
 
+        val dialogId = arguments?.getInt(getString(coreString.dialog_id_key))
+        addEditViewModel.initializeDialog(dialogId ?: -1)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                addEditViewModel.dialogEvent.collect {
+                    bindDataFromDialogObject()
+                }
+            }
+        }
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 addEditViewModel.languageSelectedEvent.collect { event ->
                     languageSelectedAdapter.addAll(event)
                     binding.spinnerLangPair.adapter = languageSelectedAdapter
-                    binding.spinnerLangPair.setSelection(languageSelectedAdapter.getPosition(currentLanguageSelected))
+                    binding.spinnerLangPair.setSelection(languageSelectedAdapter.getPosition(addEditViewModel.currentLanguageSelected))
                 }
             }
-        }
-
-        binding.spinnerLangPair.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                itemSelected: View, selectedItemPosition: Int, selectedId: Long
-            ) {
-                currentLanguageSelected = languageSelectedAdapter.getItem(selectedItemPosition)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         binding.buttonTranslation.setOnClickListener {
@@ -94,18 +117,8 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
         }
 
         binding.buttonSubmit.setOnClickListener {
-            val dialog = Dialog(0,
-                                binding.editFieldName.text.toString(),
-                                binding.editFieldFileName.text.toString(),
-                                currentLanguageSelected?.sourceLanguage?.code ?: "",
-                                currentLanguageSelected?.sourceLanguage,
-                                currentLanguageSelected?.destLanguage?.code ?: "",
-                                currentLanguageSelected?.destLanguage,
-                                binding.editFieldText.text.toString(),
-                                binding.editFieldTrans.text.toString(),
-                            0
-                            )
-            val res = addEditViewModel.validateAndAddDialog(dialog)
+            bindFields()
+            val res = addEditViewModel.validateAndSaveDialog()
             when {
                 res.isBlank() -> activity?.onBackPressed()
                 else -> {
@@ -119,6 +132,19 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
             chooseFile.type = "*/*"
             chooseFile = Intent.createChooser(chooseFile, "Choose a file")
             resultLauncher.launch(chooseFile)
+        }
+
+        binding.spinnerLangPair.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                itemSelected: View,
+                selectedItemPosition: Int,
+                selectedId: Long
+            ) {
+                addEditViewModel.currentLanguageSelected = languageSelectedAdapter.getItem(selectedItemPosition)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 }

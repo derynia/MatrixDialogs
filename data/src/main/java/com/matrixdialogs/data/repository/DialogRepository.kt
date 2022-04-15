@@ -20,5 +20,6 @@ class DialogRepository @Inject constructor(
         = dialogDao.getDialogsByLanguagePair(languageSelected.sourceLanguage?.code ?: "",
             languageSelected.destLanguage?.code ?: "", repeats)
 
+    fun getById(id: Int) : Dialog = dialogDao.getById(id)
     fun getDialogs() : Flow<List<Dialog>> = dialogDao.getDialogs()
 }

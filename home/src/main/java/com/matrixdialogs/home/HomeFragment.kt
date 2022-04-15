@@ -26,7 +26,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
     private val adapter = DialogAdapter(
         { dialog -> openText(dialog) },
-        { dialog -> openTranslation(dialog) }
+        { dialog -> openTranslation(dialog) },
+        { dialog -> editDialog(dialog) }
     )
 
     private fun navigateToTextFragment(text: String, header: String) {
@@ -45,7 +46,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun openTranslation(dialog: Dialog) {
-        navigateToTextFragment(dialog.text, getString(coreString.dialog_translation_name))
+        navigateToTextFragment(dialog.translation, getString(coreString.dialog_translation_name))
+    }
+
+    private fun editDialog(dialog: Dialog) {
+        navigateToAddEdit(dialog.item_id)
+    }
+
+    private fun navigateToAddEdit(dialogId: Int) {
+        Navigation.findNavController(this.requireView())
+            .navigate(
+                R.id.action_homeFragment_to_addEditDialogFragment,
+                bundleOf(
+                    getString(coreString.lang_selected_key) to homeViewModel.currentLanguageSelected,
+                    getString(coreString.dialog_id_key) to dialogId
+                )
+            )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,11 +106,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.buttonAddOne.setOnClickListener {
-            Navigation.findNavController(this.requireView())
-                .navigate(
-                    R.id.action_homeFragment_to_addEditDialogFragment,
-                    bundleOf(getString(coreString.lang_selected_key) to homeViewModel.currentLanguageSelected)
-                )
+            navigateToAddEdit(-1)
         }
 
         binding.buttonAddMany.setOnClickListener {

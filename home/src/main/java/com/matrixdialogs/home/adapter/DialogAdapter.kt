@@ -8,7 +8,8 @@ import com.matrixdialogs.home.databinding.CardDialogRecyclerItemBinding
 
 class DialogAdapter(
     private val onButtonTextClick : (Dialog) -> Unit,
-    private val onButtonTranslationClick : (Dialog) -> Unit
+    private val onButtonTranslationClick : (Dialog) -> Unit,
+    private val onNameClick : (Dialog) -> Unit
 ) : ListAdapter<Dialog, DialogViewHolder>(DialogComparator()) {
 
     fun setList(dialogs: List<Dialog>?) {
@@ -29,6 +30,6 @@ class DialogAdapter(
 
     override fun onBindViewHolder(holder: DialogViewHolder, position: Int) {
         val dialog = getItem(position)
-        holder.bind(dialog, onButtonTextClick, onButtonTranslationClick)
+        holder.bind(dialog, onButtonTextClick, onButtonTranslationClick, onNameClick)
     }
 }

@@ -21,13 +21,20 @@ class DialogViewHolder(val binding: CardDialogRecyclerItemBinding) : RecyclerVie
         onButtonClick(dialog)
     }
 
+    private fun onNameClick(dialog: Dialog, onTextClick: (Dialog) -> Unit) {
+        onTextClick(dialog)
+    }
+
     fun bind(
         dialog: Dialog,
         onButtonTextClick : (Dialog) -> Unit,
-        onButtonTranslationClick : (Dialog) -> Unit)
+        onButtonTranslationClick : (Dialog) -> Unit,
+        onNameClick : (Dialog) -> Unit
+    )
     {
         with (binding) {
             textDialogName.text = dialog.name
+            textDialogName.setOnClickListener { onNameClick(dialog, onNameClick) }
             textCount.text = ""
             textRepeats.text = dialog.repeats.toString()
             buttonIncrement.setOnClickListener { incrementCounter(dialog) }
