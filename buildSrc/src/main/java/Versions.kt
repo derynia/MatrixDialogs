@@ -23,11 +23,6 @@ object Versions {
     const val gradlePlugin = "7.1.2"
     const val kotlin = "1.6.20"
     const val hilt = "2.41"
-    const val glide = "4.12.0"
-    const val glideAnnotation = "4.12.0"
-
-    // network
-    const val okhttp = "4.9.3"
 
     // room
     const val room = "2.3.0"

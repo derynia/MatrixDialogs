@@ -1,7 +1,6 @@
 package com.matrixdialogs.core
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import androidx.fragment.app.FragmentActivity
 
 

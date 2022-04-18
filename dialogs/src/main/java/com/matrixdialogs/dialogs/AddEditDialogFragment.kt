@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -28,7 +27,6 @@ typealias coreString = com.matrixdialogs.core.R.string
 
 @AndroidEntryPoint
 class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
-    private var isBind = false
     private val binding: FragmentAddEditDialogBinding by viewBinding(FragmentAddEditDialogBinding::bind)
     private val addEditViewModel: AddEditDialogViewModel by viewModels()
     private lateinit var languageSelectedAdapter : ArrayAdapter<LanguageSelected>
@@ -69,14 +67,11 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
     }
 
     private fun bindDataFromDialogObject() {
-        if (addEditViewModel.isEdit() && !isBind) {
-            with(binding) {
-                editFieldName.setText(addEditViewModel.dialog.name)
-                editFieldFileName.setText(addEditViewModel.dialog.fileName)
-                editFieldText.setText(addEditViewModel.dialog.text)
-                editFieldTrans.setText(addEditViewModel.dialog.translation)
-            }
-            isBind = true
+        if (addEditViewModel.isEdit() ) {
+            binding.editFieldFileName.setText(addEditViewModel.dialog.fileName)
+            binding.editFieldName.setText(addEditViewModel.dialog.name)
+            binding.editFieldText.setText(addEditViewModel.dialog.text)
+            binding.editFieldTrans.setText(addEditViewModel.dialog.translation)
         }
     }
 

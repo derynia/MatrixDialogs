@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.matrixdialogs.data.entity.Dialog
 import com.matrixdialogs.home.databinding.CardDialogRecyclerItemBinding
 
-class DialogViewHolder(val binding: CardDialogRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class DialogViewHolder(private val binding: CardDialogRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root) {
     private fun incrementCounter(dialog: Dialog) {
         dialog.repeats++
         dialog.repeats.coerceAtMost(MAX_QTY)

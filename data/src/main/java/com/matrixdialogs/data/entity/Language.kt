@@ -17,8 +17,7 @@ data class Language(
         parcel.readString() ?: "",
         parcel.readString(),
         parcel.readString()
-    ) {
-    }
+    )
 
     override fun toString() = "${this.name} (${this.nativeName})"
 

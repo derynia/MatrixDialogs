@@ -12,8 +12,7 @@ data class LanguageSelected(
     constructor(parcel: Parcel) : this(
         parcel.readParcelable(Language::class.java.classLoader),
         parcel.readParcelable(Language::class.java.classLoader)
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeParcelable(sourceLanguage, flags)

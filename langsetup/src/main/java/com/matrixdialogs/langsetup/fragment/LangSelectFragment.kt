@@ -24,9 +24,7 @@ import kotlinx.coroutines.launch
 class LangSelectFragment : Fragment(R.layout.fragment_lang_select) {
     private val binding: FragmentLangSelectBinding by viewBinding(FragmentLangSelectBinding::bind)
     private val langSelectViewModel: LangSelectViewModel by viewModels()
-    private val adapter = LangsAdapter(
-        { languageSelected -> selectItem(languageSelected) }
-    )
+    private val adapter = LangsAdapter { languageSelected -> selectItem(languageSelected) }
 
     private fun selectItem(languageSelected: LanguageSelected) {
         findNavController().previousBackStackEntry?.savedStateHandle?.set("lSelected", languageSelected)

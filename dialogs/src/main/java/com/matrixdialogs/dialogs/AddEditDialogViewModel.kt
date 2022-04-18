@@ -25,7 +25,7 @@ class AddEditDialogViewModel @Inject constructor(
     private var isEditValue = false
     var dialog = Dialog()
 
-    private val mutableDialogEvent = MutableStateFlow<Boolean>(false)
+    private val mutableDialogEvent = MutableStateFlow(false)
     val dialogEvent : StateFlow<Boolean> = mutableDialogEvent
 
     var currentLanguageSelected: LanguageSelected? = null

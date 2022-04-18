@@ -4,7 +4,6 @@ import com.matrixdialogs.data.MatrixDB
 import com.matrixdialogs.data.dataclass.LanguageSelected
 import com.matrixdialogs.data.entity.Dialog
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class DialogRepository @Inject constructor(
