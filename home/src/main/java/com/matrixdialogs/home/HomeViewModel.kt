@@ -41,4 +41,7 @@ class HomeViewModel @Inject constructor(
             mutableDialogEvent.emitAll(dialogRepository.getDialogsByPair(currentLanguageSelected, 20))
         }
     }
+
+    fun playPause(dialog: Dialog) {
+    }
 }

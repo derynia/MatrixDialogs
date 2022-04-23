@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
+    id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
-    kotlin("android")
     kotlin("kapt")
 }
 
@@ -32,36 +32,15 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
-    // Modules
     implementation (project(":core"))
-    implementation (project(":data"))
-    implementation (project(":langsetup"))
-    implementation (project(":dialogs"))
 
     // Core
     implementation (Deps.coreKtx)
-    implementation (Deps.appCompat)
-    implementation (Deps.materialDesign)
-    implementation (Deps.constraintLayout)
-    implementation (Deps.viewBinding)
     implementation (Deps.coroutines)
-    implementation (Deps.lifecycle)
-
-    // Navigation
-    implementation (Deps.navigationFragmentKtx)
-    implementation (Deps.navigationUiKtx)
-
-    // Audio
-    implementation (Deps.exoPlayerCore)
     implementation (Deps.media)
-    //implementation (Deps.exoPlayerUI)
 
     // Hilt
     implementation(Deps.hilt)

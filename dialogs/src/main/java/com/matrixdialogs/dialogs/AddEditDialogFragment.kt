@@ -3,9 +3,10 @@ package com.matrixdialogs.dialogs
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -13,26 +14,28 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.matrixdialogs.core.G_TRANSLATE_ERROR
-import com.matrixdialogs.core.LANG_PAIR_SAVE_ERROR
-import com.matrixdialogs.core.showError
-import com.matrixdialogs.core.viewBinding
+import com.matrixdialogs.core.*
 import com.matrixdialogs.data.dataclass.LanguageSelected
 import com.matrixdialogs.dialogs.databinding.FragmentAddEditDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+
 typealias coreString = com.matrixdialogs.core.R.string
 
 @AndroidEntryPoint
 class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
+
+    private var isBound = false
     private val binding: FragmentAddEditDialogBinding by viewBinding(FragmentAddEditDialogBinding::bind)
     private val addEditViewModel: AddEditDialogViewModel by viewModels()
     private lateinit var languageSelectedAdapter : ArrayAdapter<LanguageSelected>
     private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            binding.editFieldFileName.setText(result.data?.dataString)
+            val uri = result.data?.data ?: Uri.parse("")
+            val res = FilePathResolver.getFilePath(requireContext(), uri)
+            binding.editFieldFileName.setText(res)
         }
     }
 
@@ -41,6 +44,10 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
 
         addEditViewModel.currentLanguageSelected = arguments?.getParcelable(getString(coreString.lang_selected_key))
         setUpViews()
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
     private fun toGoogleTranslate() {
@@ -54,40 +61,46 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
     }
 
     private fun bindFields() {
-        with(addEditViewModel.dialog) {
-            fileName = binding.editFieldFileName.text.toString()
-            name = binding.editFieldName.text.toString()
-            languageFromCode = addEditViewModel.currentLanguageSelected?.sourceLanguage?.code ?: ""
-            languageToCode = addEditViewModel.currentLanguageSelected?.destLanguage?.code ?: ""
-            languageFrom = addEditViewModel.currentLanguageSelected?.sourceLanguage
-            languageTo = addEditViewModel.currentLanguageSelected?.sourceLanguage
-            text = binding.editFieldText.text.toString()
-            translation = binding.editFieldTrans.text.toString()
+        if (addEditViewModel.isEdit()) {
+            addEditViewModel.currentLanguageSelected =
+                binding.spinnerLangPair.selectedItem as LanguageSelected
+
+            with(addEditViewModel.dialog) {
+                fileName = binding.editFieldFileName.text.toString()
+                name = binding.editFieldName.text.toString()
+                languageFromCode =
+                    addEditViewModel.currentLanguageSelected?.sourceLanguage?.code ?: ""
+                languageToCode = addEditViewModel.currentLanguageSelected?.destLanguage?.code ?: ""
+                languageFrom = addEditViewModel.currentLanguageSelected?.sourceLanguage
+                languageTo = addEditViewModel.currentLanguageSelected?.sourceLanguage
+                text = binding.editFieldText.text.toString()
+                translation = binding.editFieldTrans.text.toString()
+            }
         }
     }
 
     private fun bindDataFromDialogObject() {
-        if (addEditViewModel.isEdit() ) {
-            binding.editFieldFileName.setText(addEditViewModel.dialog.fileName)
-            binding.editFieldName.setText(addEditViewModel.dialog.name)
-            binding.editFieldText.setText(addEditViewModel.dialog.text)
-            binding.editFieldTrans.setText(addEditViewModel.dialog.translation)
+        val d = addEditViewModel.dialog
+        if (addEditViewModel.isEdit() && !isBound) {
+            with (binding) {
+                Log.d("CDialog", d.fileName)
+                editFieldFileName.setText(d.fileName)
+                editFieldName.setText(d.name)
+                editFieldText.setText(d.text)
+                editFieldTrans.setText(d.translation)
+            }
         }
+        isBound = true
+        Log.d("CDialog", d.fileName)
     }
 
-    private fun setUpViews() {
-        languageSelectedAdapter = ArrayAdapter<LanguageSelected>(requireContext(), android.R.layout.simple_spinner_item, mutableListOf())
-
-        binding.toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
-
-        val dialogId = arguments?.getInt(getString(coreString.dialog_id_key))
-        addEditViewModel.initializeDialog(dialogId ?: -1)
+    private fun getAdaptersData() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 addEditViewModel.dialogEvent.collect {
-                    bindDataFromDialogObject()
+                    if (it) {
+                        bindDataFromDialogObject()
+                    }
                 }
             }
         }
@@ -101,7 +114,9 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
                 }
             }
         }
+    }
 
+    private fun setOnClickListeners() {
         binding.buttonTranslation.setOnClickListener {
             when {
                 !binding.editFieldText.text.isNullOrBlank() -> {
@@ -115,31 +130,37 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
             bindFields()
             val res = addEditViewModel.validateAndSaveDialog()
             when {
-                res.isBlank() -> activity?.onBackPressed()
-                else -> {
-                    showError(activity, LANG_PAIR_SAVE_ERROR, res)
+                res.isBlank() -> {
+                    isBound = false
+                    activity?.onBackPressed()
                 }
+                else -> showError(activity, LANG_PAIR_SAVE_ERROR, res)
             }
         }
 
         binding.editFieldFileName.setOnClickListener {
-            var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
-            chooseFile.type = "*/*"
-            chooseFile = Intent.createChooser(chooseFile, "Choose a file")
+            val chooseFile = Intent(Intent.ACTION_GET_CONTENT)
+            chooseFile.addCategory(Intent.CATEGORY_OPENABLE)
+            chooseFile.type = "audio/*"
+            Intent.createChooser(chooseFile, "Choose a file")
+            chooseFile.setFlags(
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            )
             resultLauncher.launch(chooseFile)
         }
+    }
 
-        binding.spinnerLangPair.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                itemSelected: View,
-                selectedItemPosition: Int,
-                selectedId: Long
-            ) {
-                addEditViewModel.currentLanguageSelected = languageSelectedAdapter.getItem(selectedItemPosition)
-            }
+    private fun setUpViews() {
+        languageSelectedAdapter = ArrayAdapter<LanguageSelected>(requireContext(), android.R.layout.simple_spinner_item, mutableListOf())
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
         }
+
+        val dialogId = arguments?.getInt(getString(coreString.dialog_id_key))
+        addEditViewModel.initializeDialog(dialogId ?: -1)
+        getAdaptersData()
+        setOnClickListeners()
     }
 }

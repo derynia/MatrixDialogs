@@ -44,4 +44,10 @@ object Deps {
     val roomCore by lazy { "androidx.room:room-ktx:${Versions.room}" }
     val roomRuntime by lazy { "androidx.room:room-runtime:${Versions.room}" }
     val roomCompiler by lazy { "androidx.room:room-compiler:${Versions.room}" }
+
+    // Audio
+    val media by lazy { "androidx.media:media:${Versions.mediaVersion}" }
+    //val exoPlayer by lazy { "com.google.android.exoplayer:exoplayer:${Versions.exoPlayerVersion}" }
+    val exoPlayerCore by lazy { "com.google.android.exoplayer:exoplayer-core:${Versions.exoPlayerVersion}" }
+    //val exoPlayerUI by lazy { "com.google.android.exoplayer::exoplayer-ui:${Versions.exoPlayerVersion}" }
 }

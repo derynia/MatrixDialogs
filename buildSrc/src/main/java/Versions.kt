@@ -26,4 +26,8 @@ object Versions {
 
     // room
     const val room = "2.3.0"
+
+    // Audio
+    const val exoPlayerVersion = "2.17.1"
+    const val mediaVersion = "1.5.0"
 }

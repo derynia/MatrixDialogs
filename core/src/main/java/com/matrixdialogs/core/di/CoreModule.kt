@@ -43,6 +43,7 @@ class ApplicationModule {
         override val unconfined: CoroutineDispatcher
             get() = Dispatchers.Unconfined
     }
+
     @Singleton
     @Provides
     fun provideCoroutineScope(): CoroutineScope {

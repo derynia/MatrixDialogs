@@ -25,22 +25,28 @@ class DialogViewHolder(private val binding: CardDialogRecyclerItemBinding) : Rec
         onTextClick(dialog)
     }
 
+    private fun onPlayPauseClick(dialog: Dialog, onPlayPauseClick: (Dialog) -> Unit) {
+        onPlayPauseClick(dialog)
+    }
+
     fun bind(
         dialog: Dialog,
         onButtonTextClick : (Dialog) -> Unit,
         onButtonTranslationClick : (Dialog) -> Unit,
-        onNameClick : (Dialog) -> Unit
+        onButtonNameClick : (Dialog) -> Unit,
+        onButtonPlayPauseClick : (Dialog) -> Unit
     )
     {
         with (binding) {
             textDialogName.text = dialog.name
-            textDialogName.setOnClickListener { onNameClick(dialog, onNameClick) }
+            textDialogName.setOnClickListener { onNameClick(dialog, onButtonNameClick) }
             textCount.text = ""
             textRepeats.text = dialog.repeats.toString()
             buttonIncrement.setOnClickListener { incrementCounter(dialog) }
             buttonDecrement.setOnClickListener { decrementCounter(dialog) }
             buttonText.setOnClickListener { onTextClick(dialog, onButtonTextClick) }
             buttonTranslation.setOnClickListener { onTextClick(dialog, onButtonTranslationClick) }
+            buttonPlay.setOnClickListener { onPlayPauseClick(dialog, onButtonPlayPauseClick) }
         }
     }
 

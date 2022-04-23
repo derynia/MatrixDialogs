@@ -1,6 +1,9 @@
 package com.matrixdialogs.home
 
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -10,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.google.android.exoplayer2.MediaItem
 import com.matrixdialogs.core.viewBinding
 import com.matrixdialogs.data.dataclass.LanguageSelected
 import com.matrixdialogs.data.entity.Dialog
@@ -18,6 +22,7 @@ import com.matrixdialogs.home.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+
 typealias coreString = com.matrixdialogs.core.R.string
 
 @AndroidEntryPoint
@@ -27,7 +32,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val adapter = DialogAdapter(
         { dialog -> openText(dialog) },
         { dialog -> openTranslation(dialog) },
-        { dialog -> editDialog(dialog) }
+        { dialog -> editDialog(dialog) },
+        { dialog -> playPause(dialog) },
     )
 
     private fun navigateToTextFragment(text: String, header: String) {
@@ -51,6 +57,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun editDialog(dialog: Dialog) {
         navigateToAddEdit(dialog.item_id)
+    }
+
+    private fun playPause(dialog: Dialog) {
+        val mediaPlayer = MediaPlayer.create(context, Uri.parse(dialog.fileName))
+        mediaPlayer.start()
+//        val player = context?.let { ExoPlayer.Builder(it).build() }
+//        player?.let {
+//            val mediaItem: MediaItem = MediaItem.fromUri(dialog.fileName)
+//            with(player) {
+//                setMediaItem(mediaItem)
+//                prepare()
+//                play()
+//            }
+//        }
+        //homeViewModel.playPause(dialog)
     }
 
     private fun navigateToAddEdit(dialogId: Int) {

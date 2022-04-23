@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/dialogs" />
             <option value="$PROJECT_DIR$/home" />
             <option value="$PROJECT_DIR$/langsetup" />
+            <option value="$PROJECT_DIR$/playbackservice" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
