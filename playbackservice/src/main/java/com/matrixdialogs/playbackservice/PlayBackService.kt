@@ -1,43 +1,96 @@
 package com.matrixdialogs.playbackservice
 
+import android.app.PendingIntent
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import androidx.media.MediaBrowserServiceCompat
-import com.matrixdialogs.core.PLAYER_TAG
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
+import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.matrixdialogs.core.DispatcherProvider
+import com.matrixdialogs.playbackservice.callbacks.DialogEventListener
+import com.matrixdialogs.playbackservice.callbacks.DialogNotificationListener
+import com.matrixdialogs.playbackservice.callbacks.PlayBackPreparer
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+const val SERVICE_TAG = "MatrixDialogsPlayer"
+
+@AndroidEntryPoint
 class PlayBackService : MediaBrowserServiceCompat() {
+    @Inject
+    lateinit var dataSourceFactory: DefaultDataSource.Factory
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
+    @Inject
+    lateinit var mediaSource: MediaSource
 
-    private var mediaSession: MediaSessionCompat? = null
-    private lateinit var stateBuilder: PlaybackStateCompat.Builder
+    private val serviceJob = Job()
+    lateinit var dispatcherProvider: DispatcherProvider
+
+    private val serviceScope = CoroutineScope(dispatcherProvider.main + serviceJob)
+
+    private lateinit var mediaSession: MediaSessionCompat
+    private lateinit var mediaSessionConnector: MediaSessionConnector
+
+    private lateinit var playNotificationManager: DialogNotificationManager
+    var isForegroundService = false
+    private var currentTrack : MediaMetadataCompat? = null
 
     override fun onCreate() {
         super.onCreate()
+        val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let {
+            PendingIntent.getActivity(this, 0, it, 0)
+        }
 
-        // Create a MediaSessionCompat
-        mediaSession = MediaSessionCompat(baseContext, PLAYER_TAG).apply {
+        serviceScope.launch {
+            mediaSource.fetchData()
+        }
 
-//            // Enable callbacks from MediaButtons and TransportControls
-//            setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-//                    or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
-//            )
+        mediaSession = MediaSessionCompat(this, SERVICE_TAG).apply {
+            setSessionActivity(activityIntent)
+            isActive = true
+        }
+        sessionToken = mediaSession.sessionToken
+        mediaSessionConnector = MediaSessionConnector(mediaSession)
+        mediaSessionConnector.setPlayer(exoPlayer)
+        playNotificationManager = DialogNotificationManager(
+            this,
+            mediaSession.sessionToken,
+            DialogNotificationListener(this),
+        ) {
+        }
 
-            // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player
-            stateBuilder = PlaybackStateCompat.Builder()
-                .setActions(PlaybackStateCompat.ACTION_PLAY
-                        or PlaybackStateCompat.ACTION_PLAY_PAUSE
-                )
-            setPlaybackState(stateBuilder.build())
+        val playBackPreparer = PlayBackPreparer(mediaSource) {
+            currentTrack = it
+            preparePlayer(mediaSource.tracks, it, true)
+        }
+        mediaSessionConnector.setPlaybackPreparer(playBackPreparer)
 
-            // MySessionCallback() has methods that handle callbacks from a media controller
-            //setCallback(MySessionCallback())
+        exoPlayer.addListener(DialogEventListener(this))
+        playNotificationManager.showNotification(exoPlayer)
+    }
 
-            // Set the session's token so that client activities can communicate with it.
-            setSessionToken(sessionToken)
+    private fun preparePlayer(tracks: List<MediaMetadataCompat>, item: MediaMetadataCompat?, playNow: Boolean) {
+        val currentTrackIndex = if (currentTrack == null) 0 else tracks.indexOf(item)
+        // TODO check list
+        with (exoPlayer) {
+            setMediaSource(mediaSource.asMediaSource(dataSourceFactory))
+            seekTo(currentTrackIndex, 0L)
+            playWhenReady = playNow
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
+    }
     override fun onGetRoot(
         clientPackageName: String,
         clientUid: Int,

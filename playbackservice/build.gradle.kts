@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation (project(":core"))
+    implementation (project(":data"))
 
     // Core
     implementation (Deps.coreKtx)
@@ -50,4 +51,8 @@ dependencies {
     testImplementation (Deps.junit)
     androidTestImplementation (Deps.extJunit)
     androidTestImplementation (Deps.espresso)
+
+    // ExoPlayer
+    implementation (Deps.exoPlayer)
+    implementation (Deps.exoMediaSession)
 }

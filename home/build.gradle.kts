@@ -59,7 +59,7 @@ dependencies {
     implementation (Deps.navigationUiKtx)
 
     // Audio
-    implementation (Deps.exoPlayerCore)
+    implementation (Deps.exoPlayer)
     implementation (Deps.media)
     //implementation (Deps.exoPlayerUI)
 

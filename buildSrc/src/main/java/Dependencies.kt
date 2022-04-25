@@ -47,7 +47,8 @@ object Deps {
 
     // Audio
     val media by lazy { "androidx.media:media:${Versions.mediaVersion}" }
-    //val exoPlayer by lazy { "com.google.android.exoplayer:exoplayer:${Versions.exoPlayerVersion}" }
-    val exoPlayerCore by lazy { "com.google.android.exoplayer:exoplayer-core:${Versions.exoPlayerVersion}" }
+    val exoPlayer by lazy { "com.google.android.exoplayer:exoplayer:${Versions.exoPlayerVersion}" }
+//    val exoPlayerCore by lazy { "com.google.android.exoplayer:exoplayer-core:${Versions.exoPlayerVersion}" }
+    val exoMediaSession by lazy { "com.google.android.exoplayer:extension-mediasession:${Versions.exoPlayerVersion}" }
     //val exoPlayerUI by lazy { "com.google.android.exoplayer::exoplayer-ui:${Versions.exoPlayerVersion}" }
 }
