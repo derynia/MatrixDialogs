@@ -1,7 +1,5 @@
 package com.matrixdialogs.home
 
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf

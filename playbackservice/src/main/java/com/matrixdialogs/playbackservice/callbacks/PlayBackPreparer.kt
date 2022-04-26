@@ -7,7 +7,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
-import com.matrixdialogs.playbackservice.MediaSource
+import com.matrixdialogs.playbackservice.service.MediaSource
 
 class PlayBackPreparer(
     private val mediaSource: MediaSource,

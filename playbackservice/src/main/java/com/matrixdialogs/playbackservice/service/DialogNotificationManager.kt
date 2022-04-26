@@ -1,4 +1,4 @@
-package com.matrixdialogs.playbackservice
+package com.matrixdialogs.playbackservice.service
 
 import android.app.PendingIntent
 import android.content.Context
@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.matrixdialogs.core.CHANNEL_ID
 import com.matrixdialogs.core.NOTIFICATION_ID
+import com.matrixdialogs.playbackservice.R
 
 class DialogNotificationManager(
     private val context: Context,

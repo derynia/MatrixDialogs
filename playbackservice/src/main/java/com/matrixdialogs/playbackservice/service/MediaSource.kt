@@ -1,4 +1,4 @@
-package com.matrixdialogs.playbackservice
+package com.matrixdialogs.playbackservice.service
 
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
@@ -48,5 +48,5 @@ class MediaSource(private val songList : List<Dialog>) {
             .build()
 
         MediaBrowserCompat.MediaItem(desc, FLAG_PLAYABLE)
-    }
+    }.toMutableList()
 }

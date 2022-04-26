@@ -1,18 +1,25 @@
 package com.matrixdialogs.playbackservice
 
 import android.app.PendingIntent
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
+import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.matrixdialogs.core.DispatcherProvider
+import com.matrixdialogs.core.MEDIA_ROOT_ID
 import com.matrixdialogs.playbackservice.callbacks.DialogEventListener
 import com.matrixdialogs.playbackservice.callbacks.DialogNotificationListener
 import com.matrixdialogs.playbackservice.callbacks.PlayBackPreparer
+import com.matrixdialogs.playbackservice.service.DialogNotificationManager
+import com.matrixdialogs.playbackservice.service.MediaSource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -39,9 +46,22 @@ class PlayBackService : MediaBrowserServiceCompat() {
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var mediaSessionConnector: MediaSessionConnector
 
+
     private lateinit var playNotificationManager: DialogNotificationManager
     var isForegroundService = false
     private var currentTrack : MediaMetadataCompat? = null
+    private var isPlayerInitialized = false
+    private lateinit var dialogListener : DialogEventListener
+
+    private inner class PlayQueueNavigator : TimelineQueueNavigator(mediaSession) {
+        override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat =
+            mediaSource.tracks[windowIndex].description
+    }
+
+    companion object {
+        var currentDialogDuration = 0L
+            private set
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -49,22 +69,23 @@ class PlayBackService : MediaBrowserServiceCompat() {
             PendingIntent.getActivity(this, 0, it, 0)
         }
 
-        serviceScope.launch {
-            mediaSource.fetchData()
-        }
+        mediaSource.fetchData()
 
         mediaSession = MediaSessionCompat(this, SERVICE_TAG).apply {
             setSessionActivity(activityIntent)
             isActive = true
         }
+
         sessionToken = mediaSession.sessionToken
         mediaSessionConnector = MediaSessionConnector(mediaSession)
         mediaSessionConnector.setPlayer(exoPlayer)
+        mediaSessionConnector.setQueueNavigator(PlayQueueNavigator())
         playNotificationManager = DialogNotificationManager(
             this,
             mediaSession.sessionToken,
             DialogNotificationListener(this),
         ) {
+            currentDialogDuration = exoPlayer.duration
         }
 
         val playBackPreparer = PlayBackPreparer(mediaSource) {
@@ -73,7 +94,8 @@ class PlayBackService : MediaBrowserServiceCompat() {
         }
         mediaSessionConnector.setPlaybackPreparer(playBackPreparer)
 
-        exoPlayer.addListener(DialogEventListener(this))
+        dialogListener = DialogEventListener(this)
+        exoPlayer.addListener(dialogListener)
         playNotificationManager.showNotification(exoPlayer)
     }
 
@@ -87,22 +109,37 @@ class PlayBackService : MediaBrowserServiceCompat() {
         }
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        exoPlayer.stop()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         serviceScope.cancel()
+        exoPlayer.removeListener(dialogListener)
+        exoPlayer.release()
     }
+
     override fun onGetRoot(
         clientPackageName: String,
         clientUid: Int,
         rootHints: Bundle?
-    ): BrowserRoot? {
-        TODO("Not yet implemented")
-    }
+    ): BrowserRoot = BrowserRoot(MEDIA_ROOT_ID, null)
 
     override fun onLoadChildren(
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-        TODO("Not yet implemented")
+        when (parentId) {
+            MEDIA_ROOT_ID -> {
+                result.sendResult(mediaSource.asMediaItems())
+                if (!isPlayerInitialized && mediaSource.tracks.isNotEmpty()) {
+                    preparePlayer(mediaSource.tracks, mediaSource.tracks[0], false)
+                    isPlayerInitialized = true
+                }
+            }
+            else -> result.sendResult(null)
+        }
     }
 }
