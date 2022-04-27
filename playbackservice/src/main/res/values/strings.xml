@@ -2,4 +2,6 @@
 <resources>
     <string name="notification_Channel_name">Matrix Dialogs Channel</string>
     <string name="notification_Channel_Description">Shows the currentrly plaing dialogue</string>
+    <string name="suspended_connection">The connection was suspended</string>
+    <string name="couldnt_connect">Couldn\'t connect to media browser</string>
 </resources>
