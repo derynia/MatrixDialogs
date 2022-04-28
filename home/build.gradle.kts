@@ -44,6 +44,7 @@ dependencies {
     implementation (project(":data"))
     implementation (project(":langsetup"))
     implementation (project(":dialogs"))
+    implementation (project(":playbackservice"))
 
     // Core
     implementation (Deps.coreKtx)

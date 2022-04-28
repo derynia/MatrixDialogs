@@ -53,7 +53,6 @@ dependencies {
     implementation (project(":core"))
     implementation (project(":home"))
     implementation (project(":langsetup"))
-    implementation (project(":playbackservice"))
 
     // Core
     implementation (Deps.coreKtx)
