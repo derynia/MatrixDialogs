@@ -61,21 +61,16 @@ class AddEditDialogFragment : Fragment(R.layout.fragment_add_edit_dialog) {
     }
 
     private fun bindFields() {
-        if (addEditViewModel.isEdit()) {
-            addEditViewModel.currentLanguageSelected =
-                binding.spinnerLangPair.selectedItem as LanguageSelected
-
-            with(addEditViewModel.dialog) {
-                fileName = binding.editFieldFileName.text.toString()
-                name = binding.editFieldName.text.toString()
-                languageFromCode =
-                    addEditViewModel.currentLanguageSelected?.sourceLanguage?.code ?: ""
-                languageToCode = addEditViewModel.currentLanguageSelected?.destLanguage?.code ?: ""
-                languageFrom = addEditViewModel.currentLanguageSelected?.sourceLanguage
-                languageTo = addEditViewModel.currentLanguageSelected?.sourceLanguage
-                text = binding.editFieldText.text.toString()
-                translation = binding.editFieldTrans.text.toString()
-            }
+        with(addEditViewModel.dialog) {
+            fileName = binding.editFieldFileName.text.toString()
+            name = binding.editFieldName.text.toString()
+            languageFromCode =
+                addEditViewModel.currentLanguageSelected?.sourceLanguage?.code ?: ""
+            languageToCode = addEditViewModel.currentLanguageSelected?.destLanguage?.code ?: ""
+            languageFrom = addEditViewModel.currentLanguageSelected?.sourceLanguage
+            languageTo = addEditViewModel.currentLanguageSelected?.sourceLanguage
+            text = binding.editFieldText.text.toString()
+            translation = binding.editFieldTrans.text.toString()
         }
     }
 

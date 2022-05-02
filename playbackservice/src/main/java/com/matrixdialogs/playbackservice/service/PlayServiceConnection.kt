@@ -2,7 +2,6 @@ package com.matrixdialogs.playbackservice.service
 
 import android.content.ComponentName
 import android.content.Context
-import android.media.browse.MediaBrowser
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -21,7 +20,9 @@ class PlayServiceConnection(
     private val _isConnected = MutableLiveData<Event<Resource<Boolean>>>()
     val isConnected : LiveData<Event<Resource<Boolean>>> = _isConnected
 
-    private val _playbackState = MutableLiveData<PlaybackStateCompat?>()
+    private val _playbackState = MutableLiveData<PlaybackStateCompat?>().apply {
+        postValue(EMPTY_PLAYBACK_STATE)
+    }
     val playbackState : LiveData<PlaybackStateCompat?> = _playbackState
 
     private val _currentlyPlaying = MutableLiveData<MediaMetadataCompat>()
@@ -41,9 +42,8 @@ class PlayServiceConnection(
         connect()
     }
 
-    val transportControls
+    val transportControls: MediaControllerCompat.TransportControls
         get() = mediaController.transportControls
-
 
     private inner class MediaBrowserConnectionCallback(
         private val context: Context
@@ -75,6 +75,7 @@ class PlayServiceConnection(
         }
 
         override fun onSessionEvent(event: String?, extras: Bundle?) {
+            super.onSessionEvent(event, extras)
         }
 
         override fun onSessionDestroyed() {
@@ -90,3 +91,7 @@ class PlayServiceConnection(
         mediaBrowser.unsubscribe(parentId, callback)
     }
 }
+@Suppress("PropertyName")
+val EMPTY_PLAYBACK_STATE: PlaybackStateCompat = PlaybackStateCompat.Builder()
+    .setState(PlaybackStateCompat.STATE_NONE, 0, 0f)
+    .build()

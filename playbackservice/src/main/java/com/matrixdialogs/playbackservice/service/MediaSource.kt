@@ -12,11 +12,12 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.matrixdialogs.data.entity.Dialog
 
-class MediaSource(private val songList : List<Dialog>) {
+class MediaSource {
+    val dialogs : MutableList<Dialog> = mutableListOf()
     var tracks = emptyList<MediaMetadataCompat>()
 
     fun fetchData() {
-        tracks = songList.map { dialog ->
+        tracks = dialogs.map { dialog ->
             Builder()
                 .putString(METADATA_KEY_MEDIA_ID, dialog.item_id.toString())
                 .putString(METADATA_KEY_TITLE, dialog.name)
@@ -26,6 +27,10 @@ class MediaSource(private val songList : List<Dialog>) {
                 .putString(METADATA_KEY_DISPLAY_SUBTITLE, "${dialog.languageFrom} -> ${dialog.languageTo}")
                 .build()
         }
+    }
+
+    fun clearData() {
+        dialogs.clear()
     }
 
     fun asMediaSource(dataSourceFactory: DefaultDataSource.Factory) : ConcatenatingMediaSource {

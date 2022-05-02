@@ -1,7 +1,10 @@
 package com.matrixdialogs.home
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -10,8 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
+import com.google.android.material.button.MaterialButton
 import com.matrixdialogs.core.viewBinding
 import com.matrixdialogs.data.dataclass.LanguageSelected
 import com.matrixdialogs.data.entity.Dialog
@@ -31,7 +33,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         { dialog -> openText(dialog) },
         { dialog -> openTranslation(dialog) },
         { dialog -> editDialog(dialog) },
-        { dialog -> playPause(dialog) },
+        { dialog, button -> playPause(dialog, button) },
     )
 
     private fun navigateToTextFragment(text: String, header: String) {
@@ -57,19 +59,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         navigateToAddEdit(dialog.item_id)
     }
 
-    private fun playPause(dialog: Dialog) {
-//        val mediaPlayer = MediaPlayer.create(context, Uri.parse(dialog.fileName))
-//        mediaPlayer.start()
-        val player = context?.let { ExoPlayer.Builder(it).build() }
-        player?.let {
-            val mediaItem: MediaItem = MediaItem.fromUri(dialog.fileName)
-            with(player) {
-                setMediaItem(mediaItem)
-                prepare()
-                play()
-            }
-        }
-        //homeViewModel.playPause(dialog)
+    private fun playPause(dialog: Dialog, button: MaterialButton) {
+        val isPlaying = homeViewModel.playOrToggle(dialog, true)
+        button.icon = context?.let { getDrawable(it, homeViewModel.getIconDrawable(isPlaying)) }
     }
 
     private fun navigateToAddEdit(dialogId: Int) {
@@ -102,6 +94,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 homeViewModel.dialogEvent.collect { event ->
                     adapter.setList(event)
+                    homeViewModel.setMediaSource(event)
                 }
             }
         }

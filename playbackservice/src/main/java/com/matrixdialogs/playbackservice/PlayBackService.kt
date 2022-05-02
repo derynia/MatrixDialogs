@@ -7,6 +7,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
 import androidx.media.MediaBrowserServiceCompat
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
@@ -15,16 +16,15 @@ import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.matrixdialogs.core.DispatcherProvider
 import com.matrixdialogs.core.MEDIA_ROOT_ID
+import com.matrixdialogs.core.di.IoDispatcher
+import com.matrixdialogs.core.di.MainDispatcher
 import com.matrixdialogs.playbackservice.callbacks.DialogEventListener
 import com.matrixdialogs.playbackservice.callbacks.DialogNotificationListener
 import com.matrixdialogs.playbackservice.callbacks.PlayBackPreparer
 import com.matrixdialogs.playbackservice.service.DialogNotificationManager
 import com.matrixdialogs.playbackservice.service.MediaSource
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 const val SERVICE_TAG = "MatrixDialogsPlayer"
@@ -39,13 +39,10 @@ class PlayBackService : MediaBrowserServiceCompat() {
     lateinit var mediaSource: MediaSource
 
     private val serviceJob = Job()
-    lateinit var dispatcherProvider: DispatcherProvider
-
-    private val serviceScope = CoroutineScope(dispatcherProvider.main + serviceJob)
+    private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var mediaSessionConnector: MediaSessionConnector
-
 
     private lateinit var playNotificationManager: DialogNotificationManager
     var isForegroundService = false
@@ -69,17 +66,12 @@ class PlayBackService : MediaBrowserServiceCompat() {
             PendingIntent.getActivity(this, 0, it, 0)
         }
 
-        mediaSource.fetchData()
-
         mediaSession = MediaSessionCompat(this, SERVICE_TAG).apply {
             setSessionActivity(activityIntent)
             isActive = true
         }
-
         sessionToken = mediaSession.sessionToken
-        mediaSessionConnector = MediaSessionConnector(mediaSession)
-        mediaSessionConnector.setPlayer(exoPlayer)
-        mediaSessionConnector.setQueueNavigator(PlayQueueNavigator())
+
         playNotificationManager = DialogNotificationManager(
             this,
             mediaSession.sessionToken,
@@ -92,7 +84,11 @@ class PlayBackService : MediaBrowserServiceCompat() {
             currentTrack = it
             preparePlayer(mediaSource.tracks, it, true)
         }
+
+        mediaSessionConnector = MediaSessionConnector(mediaSession)
         mediaSessionConnector.setPlaybackPreparer(playBackPreparer)
+        mediaSessionConnector.setQueueNavigator(PlayQueueNavigator())
+        mediaSessionConnector.setPlayer(exoPlayer)
 
         dialogListener = DialogEventListener(this)
         exoPlayer.addListener(dialogListener)
@@ -106,6 +102,7 @@ class PlayBackService : MediaBrowserServiceCompat() {
             setMediaSource(mediaSource.asMediaSource(dataSourceFactory))
             seekTo(currentTrackIndex, 0L)
             playWhenReady = playNow
+            prepare()
         }
     }
 

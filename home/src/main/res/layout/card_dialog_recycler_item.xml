@@ -103,20 +103,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.Core.Button.Outlined" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonPause"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="92dp"
-            android:backgroundTint="@color/black"
-            android:visibility="gone"
-            app:icon="@drawable/pause"
-            app:iconGravity="textEnd"
-            app:iconTint="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/ShapeAppearanceOverlay.Core.Button.Outlined" />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/buttonPause"-->
+<!--            style="@style/Widget.App.Button.OutlinedButton.IconOnly"-->
+<!--            android:layout_width="32dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:layout_marginEnd="92dp"-->
+<!--            android:backgroundTint="@color/black"-->
+<!--            android:visibility="gone"-->
+<!--            app:icon="@drawable/pause"-->
+<!--            app:iconGravity="textEnd"-->
+<!--            app:iconTint="@color/white"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:shapeAppearance="@style/ShapeAppearanceOverlay.Core.Button.Outlined" />-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonText"

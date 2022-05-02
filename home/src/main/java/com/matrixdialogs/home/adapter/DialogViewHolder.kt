@@ -1,6 +1,9 @@
 package com.matrixdialogs.home.adapter
 
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.matrixdialogs.data.entity.Dialog
 import com.matrixdialogs.home.databinding.CardDialogRecyclerItemBinding
 
@@ -25,8 +28,8 @@ class DialogViewHolder(private val binding: CardDialogRecyclerItemBinding) : Rec
         onTextClick(dialog)
     }
 
-    private fun onPlayPauseClick(dialog: Dialog, onPlayPauseClick: (Dialog) -> Unit) {
-        onPlayPauseClick(dialog)
+    private fun onPlayPauseClick(dialog: Dialog, onPlayPauseClick: (Dialog, MaterialButton) -> Unit, button: MaterialButton) {
+        onPlayPauseClick(dialog, button)
     }
 
     fun bind(
@@ -34,7 +37,7 @@ class DialogViewHolder(private val binding: CardDialogRecyclerItemBinding) : Rec
         onButtonTextClick : (Dialog) -> Unit,
         onButtonTranslationClick : (Dialog) -> Unit,
         onButtonNameClick : (Dialog) -> Unit,
-        onButtonPlayPauseClick : (Dialog) -> Unit
+        onButtonPlayPauseClick : (Dialog, MaterialButton) -> Unit
     )
     {
         with (binding) {
@@ -46,7 +49,7 @@ class DialogViewHolder(private val binding: CardDialogRecyclerItemBinding) : Rec
             buttonDecrement.setOnClickListener { decrementCounter(dialog) }
             buttonText.setOnClickListener { onTextClick(dialog, onButtonTextClick) }
             buttonTranslation.setOnClickListener { onTextClick(dialog, onButtonTranslationClick) }
-            buttonPlay.setOnClickListener { onPlayPauseClick(dialog, onButtonPlayPauseClick) }
+            buttonPlay.setOnClickListener { onPlayPauseClick(dialog, onButtonPlayPauseClick, buttonPlay) }
         }
     }
 

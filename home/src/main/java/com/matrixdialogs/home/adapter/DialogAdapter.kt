@@ -2,7 +2,9 @@ package com.matrixdialogs.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.recyclerview.widget.ListAdapter
+import com.google.android.material.button.MaterialButton
 import com.matrixdialogs.data.entity.Dialog
 import com.matrixdialogs.home.databinding.CardDialogRecyclerItemBinding
 
@@ -10,7 +12,7 @@ class DialogAdapter(
     private val onButtonTextClick : (Dialog) -> Unit,
     private val onButtonTranslationClick : (Dialog) -> Unit,
     private val onNameClick : (Dialog) -> Unit,
-    private val onPlayPauseClick : (Dialog) -> Unit
+    private val onPlayPauseClick : (Dialog, MaterialButton) -> Unit
 ) : ListAdapter<Dialog, DialogViewHolder>(DialogComparator()) {
 
     fun setList(dialogs: List<Dialog>?) {
