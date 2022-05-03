@@ -1,12 +1,10 @@
 package com.matrixdialogs.home
 
-import android.graphics.drawable.Drawable
 import android.media.MediaMetadata.METADATA_KEY_MEDIA_ID
 import android.support.v4.media.MediaBrowserCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.matrixdialogs.core.DispatcherProvider
 import com.matrixdialogs.core.MEDIA_ROOT_ID
 import com.matrixdialogs.data.SharedPrefsRepository
 import com.matrixdialogs.data.dataclass.LanguageSelected
@@ -37,9 +35,6 @@ class HomeViewModel @Inject constructor(
     val isConnected = playServiceConnection.isConnected
     val currentlyPlaying = playServiceConnection.currentlyPlaying
     val playbackState = playServiceConnection.playbackState
-    val mediaButtonRes = MutableLiveData<Int>().apply {
-        postValue(R.drawable.pause)
-    }
 
     init {
         playServiceConnection.subscribe(MEDIA_ROOT_ID, object : MediaBrowserCompat.SubscriptionCallback() {
@@ -54,7 +49,6 @@ class HomeViewModel @Inject constructor(
                         it.description.title.toString()
                     )
                 }
-
             }
         })
 
@@ -71,7 +65,7 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            mutableDialogEvent.emitAll(dialogRepository.getDialogsByPair(currentLanguageSelected, 20))
+            mutableDialogEvent.emitAll(dialogRepository.getDialogsByPair(currentLanguageSelected))
         }
     }
 
@@ -111,12 +105,6 @@ class HomeViewModel @Inject constructor(
 
         return false
     }
-
-    fun getIconDrawable(isPlaying: Boolean) : Int =
-        when (isPlaying) {
-            true -> R.drawable.pause
-            else ->R.drawable.play
-        }
 
     override fun onCleared() {
         super.onCleared()

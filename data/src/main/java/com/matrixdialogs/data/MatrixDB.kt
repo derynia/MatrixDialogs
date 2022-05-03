@@ -17,7 +17,7 @@ import com.matrixdialogs.data.entity.LanguagePairs
 import kotlinx.coroutines.*
 import java.io.IOException
 
-@Database(entities = [Dialog::class, Language::class, LanguagePairs::class], version = 5)
+@Database(entities = [Dialog::class, Language::class, LanguagePairs::class], version = 6)
 abstract class MatrixDB : RoomDatabase() {
     internal abstract fun dialogDao(): DialogDao
     internal abstract fun languageDao(): LanguageDao

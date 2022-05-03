@@ -33,7 +33,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         { dialog -> openText(dialog) },
         { dialog -> openTranslation(dialog) },
         { dialog -> editDialog(dialog) },
-        { dialog, button -> playPause(dialog, button) },
+        { dialog -> playPause(dialog) },
     )
 
     private fun navigateToTextFragment(text: String, header: String) {
@@ -59,9 +59,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         navigateToAddEdit(dialog.item_id)
     }
 
-    private fun playPause(dialog: Dialog, button: MaterialButton) {
-        val isPlaying = homeViewModel.playOrToggle(dialog, true)
-        button.icon = context?.let { getDrawable(it, homeViewModel.getIconDrawable(isPlaying)) }
+    private fun playPause(dialog: Dialog) {
+        homeViewModel.playOrToggle(dialog, true)
     }
 
     private fun navigateToAddEdit(dialogId: Int) {
@@ -99,6 +98,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
+        homeViewModel.currentlyPlaying.observe(viewLifecycleOwner) {
+            adapter.refreshIcons(homeViewModel.currentlyPlaying.value, homeViewModel.playbackState.value)
+        }
+
+        homeViewModel.playbackState.observe(viewLifecycleOwner) {
+            adapter.refreshIcons(homeViewModel.currentlyPlaying.value, homeViewModel.playbackState.value)
+        }
+
         findNavController()
             .currentBackStackEntry?.savedStateHandle?.getLiveData<LanguageSelected>(getString(coreString.lang_selected_key))?.observe(viewLifecycleOwner)
             {result ->
@@ -122,6 +129,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.buttonAddMany.setOnClickListener {
+        }
+
+        homeViewModel.playbackState.observe(viewLifecycleOwner) {
 
         }
     }

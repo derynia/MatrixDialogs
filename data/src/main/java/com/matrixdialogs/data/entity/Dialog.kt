@@ -1,9 +1,6 @@
 package com.matrixdialogs.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(tableName = "Dialog")
 data class Dialog(
@@ -16,5 +13,7 @@ data class Dialog(
     @Embedded(prefix = "d_") var languageTo: Language? = null,
     @ColumnInfo(name = "text") var text: String = "",
     @ColumnInfo(name = "translation") var translation: String = "",
-    var repeats: Int = 0
-)
+) {
+    @Ignore var repeats: Int = 0
+    @Ignore var playing: Boolean = false
+}

@@ -16,3 +16,9 @@ fun showError(activity: FragmentActivity?, title: String, text: String) {
     builder.create()
     builder.show()
 }
+
+fun playPauseIcon(isPlaing : Boolean) : Int =
+    when (isPlaing) {
+        true -> R.drawable.pause
+        else -> R.drawable.play
+    }
