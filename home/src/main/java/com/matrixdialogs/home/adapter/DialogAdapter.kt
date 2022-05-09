@@ -23,6 +23,10 @@ class DialogAdapter(
     }
 
     fun refreshIcons(currentlyPlaying : MediaMetadataCompat?, playbackState: PlaybackStateCompat?) {
+        if (currentlyPlaying != null) {
+            //Log.d("PlayingRepeat", currentlyPlaying.bundle.getLong(MEDIA_REPEATS_KEY).toString())
+        }
+
         var currentId = -1
         if (currentlyPlaying != null) {
             when {

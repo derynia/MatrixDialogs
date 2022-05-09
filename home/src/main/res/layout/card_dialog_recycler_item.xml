@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="0dp"
@@ -21,14 +22,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.45" />
+            app:layout_constraintGuide_percent="0.55" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.35" />
+            app:layout_constraintGuide_percent="0.65" />
 
         <TextView
             android:id="@+id/textDialogName"
@@ -53,42 +54,6 @@
             app:layout_constraintEnd_toStartOf="@id/guidelineHalf"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/buttonDecrement"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:contentDescription="@string/sign_minus"
-            android:background="@drawable/button_container"
-            android:layout_marginEnd="2dp"
-            android:layout_marginStart="5dp"
-            android:src="@drawable/minus_sign"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guidelineHalf"/>
-
-        <TextView
-            android:id="@+id/textRepeats"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:text="@string/repeats"
-            android:textAlignment="center"
-            app:layout_constraintStart_toEndOf="@id/buttonDecrement"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <ImageButton
-            android:id="@+id/buttonIncrement"
-            android:contentDescription="@string/sign_plus"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="2dp"
-            android:background="@drawable/plus_button_selector"
-            app:layout_constraintStart_toEndOf="@id/textRepeats"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonPlay"
             style="@style/Widget.App.Button.OutlinedButton.IconOnly"
@@ -102,21 +67,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.Core.Button.Outlined" />
-
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/buttonPause"-->
-<!--            style="@style/Widget.App.Button.OutlinedButton.IconOnly"-->
-<!--            android:layout_width="32dp"-->
-<!--            android:layout_height="32dp"-->
-<!--            android:layout_marginEnd="92dp"-->
-<!--            android:backgroundTint="@color/black"-->
-<!--            android:visibility="gone"-->
-<!--            app:icon="@drawable/pause"-->
-<!--            app:iconGravity="textEnd"-->
-<!--            app:iconTint="@color/white"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:shapeAppearance="@style/ShapeAppearanceOverlay.Core.Button.Outlined" />-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonText"

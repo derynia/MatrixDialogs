@@ -2,7 +2,6 @@ package com.matrixdialogs.home
 
 import android.media.MediaMetadata.METADATA_KEY_MEDIA_ID
 import android.support.v4.media.MediaBrowserCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.matrixdialogs.core.MEDIA_ROOT_ID
@@ -35,8 +34,10 @@ class HomeViewModel @Inject constructor(
     val isConnected = playServiceConnection.isConnected
     val currentlyPlaying = playServiceConnection.currentlyPlaying
     val playbackState = playServiceConnection.playbackState
+    private var repeats : Int = 0
 
     init {
+        repeats = sharedPrefsRepository.getRepeats()
         playServiceConnection.subscribe(MEDIA_ROOT_ID, object : MediaBrowserCompat.SubscriptionCallback() {
             override fun onChildrenLoaded(
                 parentId: String,
@@ -70,6 +71,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setMediaSource(dialogs: List<Dialog>) {
+        dialogs.forEach { it.repeats = repeats }
+
         mediaSource.clearData()
         dialogs.forEach {
             mediaSource.dialogs.add(it)
@@ -110,6 +113,4 @@ class HomeViewModel @Inject constructor(
         super.onCleared()
         playServiceConnection.unsubscribe(MEDIA_ROOT_ID, object : MediaBrowserCompat.SubscriptionCallback() {})
     }
-
-
 }

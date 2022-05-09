@@ -22,8 +22,10 @@ class DialogNotificationManager(
     private inner class DescriptionAdapter(
         private val mediaController: MediaControllerCompat
     ) : PlayerNotificationManager.MediaDescriptionAdapter {
-        override fun getCurrentContentTitle(player: Player): CharSequence
-            = mediaController.metadata.description.title.toString()
+        override fun getCurrentContentTitle(player: Player): CharSequence {
+            newTrackCallBack()
+            return mediaController.metadata.description.title.toString()
+        }
 
         override fun createCurrentContentIntent(player: Player): PendingIntent?  = mediaController.sessionActivity
 

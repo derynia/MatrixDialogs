@@ -1,10 +1,7 @@
 package com.matrixdialogs.home
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
 import com.matrixdialogs.core.viewBinding
 import com.matrixdialogs.data.dataclass.LanguageSelected
 import com.matrixdialogs.data.entity.Dialog
@@ -98,9 +94,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        homeViewModel.currentlyPlaying.observe(viewLifecycleOwner) {
-            adapter.refreshIcons(homeViewModel.currentlyPlaying.value, homeViewModel.playbackState.value)
-        }
+//        homeViewModel.currentlyPlaying.observe(viewLifecycleOwner) {
+//            adapter.refreshIcons(homeViewModel.currentlyPlaying.value, homeViewModel.playbackState.value)
+//        }
 
         homeViewModel.playbackState.observe(viewLifecycleOwner) {
             adapter.refreshIcons(homeViewModel.currentlyPlaying.value, homeViewModel.playbackState.value)

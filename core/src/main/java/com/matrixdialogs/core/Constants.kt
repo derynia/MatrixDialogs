@@ -7,3 +7,4 @@ const val PLAYER_TAG = "Matrix Dialog Player"
 const val NOTIFICATION_ID = 1
 const val CHANNEL_ID = "dialog"
 const val MEDIA_ROOT_ID = "root_id"
+const val MEDIA_REPEATS_KEY = "media_repeats_key"

@@ -13,12 +13,25 @@ class SharedPrefsRepository @Inject constructor(
     private val sharedPreferences
         get() = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    fun saveCurrentSelected(langSelected: LanguageSelected) {
+    private fun putPrefByKey(key: String, value: String) {
         with(sharedPreferences.edit()) {
-            putString(SELECTED_KEY, Gson().toJson(langSelected))
+            putString(key, value)
             this.apply()
         }
     }
+
+    fun saveCurrentSelected(langSelected: LanguageSelected) {
+        putPrefByKey(SELECTED_KEY, Gson().toJson(langSelected))
+    }
+
+    fun saveRepeats(repeats: Int) {
+        putPrefByKey(REPEATS_KEY, repeats.toString())
+    }
+
+    fun getRepeats() : Int = sharedPreferences.getString(
+            REPEATS_KEY,
+            DEF_REPEATS
+        )?.toInt() ?: 0
 
     fun getCurrentSelected() : LanguageSelected? {
         val json = sharedPreferences.getString(
@@ -35,5 +48,7 @@ class SharedPrefsRepository @Inject constructor(
     companion object {
         private const val PREFS_NAME = "MatrixDialogs"
         private const val SELECTED_KEY = "language_selected_key"
+        private const val REPEATS_KEY = "repeats_key"
+        private const val DEF_REPEATS = "20"
     }
 }

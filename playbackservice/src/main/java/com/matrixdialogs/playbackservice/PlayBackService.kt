@@ -7,17 +7,14 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
 import androidx.media.MediaBrowserServiceCompat
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.matrixdialogs.core.DispatcherProvider
 import com.matrixdialogs.core.MEDIA_ROOT_ID
-import com.matrixdialogs.core.di.IoDispatcher
-import com.matrixdialogs.core.di.MainDispatcher
 import com.matrixdialogs.playbackservice.callbacks.DialogEventListener
 import com.matrixdialogs.playbackservice.callbacks.DialogNotificationListener
 import com.matrixdialogs.playbackservice.callbacks.PlayBackPreparer
@@ -97,11 +94,11 @@ class PlayBackService : MediaBrowserServiceCompat() {
 
     private fun preparePlayer(tracks: List<MediaMetadataCompat>, item: MediaMetadataCompat?, playNow: Boolean) {
         val currentTrackIndex = if (currentTrack == null) 0 else tracks.indexOf(item)
-        // TODO check list
         with (exoPlayer) {
             setMediaSource(mediaSource.asMediaSource(dataSourceFactory))
             seekTo(currentTrackIndex, 0L)
             playWhenReady = playNow
+            repeatMode = Player.REPEAT_MODE_ONE
             prepare()
         }
     }

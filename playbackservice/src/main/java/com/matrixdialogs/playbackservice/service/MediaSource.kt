@@ -6,10 +6,13 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.MediaMetadataCompat.*
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.MediaMetadata
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.matrixdialogs.core.MEDIA_REPEATS_KEY
 import com.matrixdialogs.data.entity.Dialog
 
 class MediaSource {
@@ -25,6 +28,8 @@ class MediaSource {
                 .putString(METADATA_KEY_MEDIA_URI, dialog.fileName)
                 .putString(METADATA_KEY_DISPLAY_DESCRIPTION, dialog.text)
                 .putString(METADATA_KEY_DISPLAY_SUBTITLE, "${dialog.languageFrom} -> ${dialog.languageTo}")
+                .putString(METADATA_KEY_DISPLAY_SUBTITLE, "${dialog.languageFrom} -> ${dialog.languageTo}")
+                .putLong(MEDIA_REPEATS_KEY, dialog.repeats.toLong())
                 .build()
         }
     }
@@ -36,8 +41,15 @@ class MediaSource {
     fun asMediaSource(dataSourceFactory: DefaultDataSource.Factory) : ConcatenatingMediaSource {
         val concatenatingMediaSource = ConcatenatingMediaSource()
         tracks.forEach { track ->
+            val mediaItem = MediaItem.Builder()
+                .setUri(track.getString(METADATA_KEY_MEDIA_URI).toUri())
+                .setMediaMetadata(MediaMetadata.Builder()
+                    .setExtras(bundleOf(MEDIA_REPEATS_KEY to track.getLong(MEDIA_REPEATS_KEY)))
+                    .build()
+                )
+                .build()
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(MediaItem.fromUri(track.getString(METADATA_KEY_MEDIA_URI).toUri()))
+                .createMediaSource(mediaItem)
             concatenatingMediaSource.addMediaSource(mediaSource)
         }
 
@@ -50,6 +62,7 @@ class MediaSource {
             .setTitle(track.description.title)
             .setSubtitle(track.description.subtitle)
             .setMediaId(track.description.mediaId)
+            .setExtras(bundleOf(MEDIA_REPEATS_KEY to track.getLong(MEDIA_REPEATS_KEY)))
             .build()
 
         MediaBrowserCompat.MediaItem(desc, FLAG_PLAYABLE)

@@ -4,4 +4,5 @@
     <string name="notification_Channel_Description">Shows the currentrly plaing dialogue</string>
     <string name="suspended_connection">The connection was suspended</string>
     <string name="couldnt_connect">Couldn\'t connect to media browser</string>
+    <string name="unknown_player_error">Unknown player error</string>
 </resources>

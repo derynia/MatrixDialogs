@@ -26,7 +26,6 @@ class PlayBackPreparer(
                 PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID
     }
 
-
     override fun onPrepare(playWhenReady: Boolean) = Unit
 
     override fun onPrepareFromMediaId(mediaId: String, playWhenReady: Boolean, extras: Bundle?) {

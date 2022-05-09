@@ -2,14 +2,17 @@ package com.matrixdialogs.playbackservice.service
 
 import android.content.ComponentName
 import android.content.Context
+import android.media.browse.MediaBrowser
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.matrixdialogs.core.Event
+import com.matrixdialogs.core.MEDIA_REPEATS_KEY
 import com.matrixdialogs.core.Resource
 import com.matrixdialogs.playbackservice.PlayBackService
 import com.matrixdialogs.playbackservice.R
@@ -65,12 +68,13 @@ class PlayServiceConnection(
     }
 
     private inner class MediaControllerCallback : MediaControllerCompat.Callback() {
-
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+            //Log.d("PlayService", "State: " + state.toString())
             _playbackState.postValue(state)
         }
 
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
+            mediaController.metadata
             _currentlyPlaying.postValue(metadata)
         }
 

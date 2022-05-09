@@ -3,7 +3,7 @@
     <string name="select_language_pair">Select language pair</string>
     <string name="settings">Settings</string>
     <string name="dialog_name">dialog name</string>
-    <string name="repeats">%1$d</string>
+    <string name="repeats">"r"</string>
     <string name="sign_minus">-</string>
     <string name="sign_plus">+</string>
     <string name="add_new_dialog">Add new dialog</string>
